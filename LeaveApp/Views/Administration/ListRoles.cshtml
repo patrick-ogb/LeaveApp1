@@ -1,0 +1,71 @@
+﻿@model IEnumerable<IdentityRole>
+
+@inject IAuthorizationService authorizationService
+
+@{
+    ViewData["Title"] = "All Roles";
+}
+<div class="display-4">All Roles</div>
+
+@if (Model.Any())
+{
+    <a class="btn btn-outline-primary mb-3" asp-action="CreateRole" asp-controller="Administration">Create Role</a>
+    foreach (var role in Model)
+    {
+        <div class="card mb-3 col-sm-12">
+            <div class="card-header">
+                Role Id: @role.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Role Name: @role.Name
+                </h5>
+            </div>
+            <div class="card-footer">
+                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+
+                    @*@if((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
+                        {*@
+                    <a asp-action="EditRole" asp-controller="Administration"
+                       asp-route-id="@role.Id" class="btn btn-outline-primary m-1" style="width:auto">
+                        Edit
+                    </a>
+                    @*}*@
+
+                    @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
+                    {
+                        <span style="display:none" id="confirmDeleteSpan_@role.Id">
+                            <span>Are you sure you want to delete?</span>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <a class="btn btn-primary"
+                               onclick="confirmDelete('@role.Id', false)">No</a>
+                        </span>
+                        <span id="deleteSpan_@role.Id">
+                            <a class="btn btn-danger"
+                               onclick="confirmDelete('@role.Id', true)">Delete</a>
+                        </span>
+                    }
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card col-sm-12">
+        <div class="card-header">
+            No role created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a role
+            </h5>
+            <a asp-action="CreateRole" asp-controller="Administration" class="btn-outline-primary">
+                Create Role
+            </a>
+        </div>
+    </div>
+}
+@section Scripts{
+    <script src="~/js/CustomScript.js"></script>
+}

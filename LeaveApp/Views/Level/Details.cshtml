@@ -1,0 +1,32 @@
+﻿@model LevelDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>LEVEL DETAILS</h1>
+<hr />
+
+<div class="row justify-content-around m-3">
+    <div class="col-sm-8">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h1 class="text-center"> @Model.Level.Name</h1>
+            </div>
+            <div class="card-body text-center">
+                <h4>Department ID: @Model.Level.Id</h4>
+                <h4>Description: @Model.Level.Description</h4>
+                <h4>Date Created: @Model.Level.DateCreated</h4>
+                <h4>Date Modified: @Model.Level.DateModified</h4>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-controller="Level" asp-action="Index" class="btn btn-outline-primary">Back</a>
+                <a asp-action="Edit" asp-controller="Level" asp-route-id="@Model.Level.Id"
+                   class="btn btn-outline-success">Edit</a>
+                <a asp-action="Delete" asp-controller="Level" asp-route-id="@Model.Level.Id" class="btn btn-outline-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

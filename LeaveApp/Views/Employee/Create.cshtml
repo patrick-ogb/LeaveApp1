@@ -1,0 +1,91 @@
+﻿@model EmployeeCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="display-4 text-center text-primary">Add New Employee </h1>
+
+<hr />
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Employee.FirstName" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Employee.FirstName" class="form-control" />
+                    <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Employee.LastName" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Employee.LastName" class="form-control" />
+                    <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Employee.Email" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Employee.Email" class="form-control" />
+                    <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Employee.Phone" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Employee.Phone" class="form-control" />
+                    <span asp-validation-for="Employee.Phone" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Employee.DepartmentId" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <select asp-for="Employee.DepartmentId" asp-items="@(new SelectList(Model.DepartmentList, "Id", "Name"))"
+                            class="form-control">
+                        <option selected disabled>Select Department</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Employee.LevelId" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    @*<input asp-for="Employee.Salary" class="form-control" />*@
+                    <select asp-for="Employee.LevelId" asp-items="@(new SelectList(Model.LevelList, "Id", "Name"))"
+                            class="form-control">
+                        <option selected disabled>Select Level</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-info ml-5">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -1,0 +1,41 @@
+﻿@model LevelCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h6 class="display-4 text-center text-primary">Create Level</h6>
+
+<hr />
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Level.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Level.Name" class="form-control" />
+                    <span asp-validation-for="Level.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="Level.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Level.Description" class="form-control" />
+                    <span asp-validation-for="Level.Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-info ml-5">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -1,0 +1,65 @@
+﻿@model LeaveRequestCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-center display-4 text-primary">Create LeaveRequest</h1>
+
+<hr />
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="LeaveRequest.EmployeeId" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="LeaveRequest.EmployeeId" class="form-control" />
+                    <span asp-validation-for="LeaveRequest.EmployeeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="LeaveRequest.LeaveTypeId" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <select asp-for="LeaveRequest.LeaveTypeId" asp-items="@(new SelectList(Model.LeaveTypeList, "Id", "Name"))"
+                            class="form-control">
+                        <option selected disabled>Select Leave_Type</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="LeaveRequest.ApprovalDate" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="LeaveRequest.ApprovalDate" class="form-control" />
+                    <span asp-validation-for="LeaveRequest.ApprovalDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label asp-for="LeaveRequest.ApprovedBy" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="LeaveRequest.ApprovedBy" class="form-control" />
+                    <span asp-validation-for="LeaveRequest.ApprovedBy" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -1,0 +1,78 @@
+﻿@model LeaveRequest
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h6 class="display-4 text-center text-primary">Edit LeaveRequest</h6>
+<hr />
+
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label asp-for="Id" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="Id" class="form-control" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label asp-for="EmployeeId" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="EmployeeId" class="form-control" />
+                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label asp-for="LeaveTypeId" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="LeaveTypeId" class="form-control" />
+                    <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label asp-for="RequestDate" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="RequestDate" class="form-control" />
+                    <span asp-validation-for="RequestDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label asp-for="ApprovalDate" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="ApprovalDate" class="form-control" />
+                    <span asp-validation-for="ApprovalDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label asp-for="ApprovedBy" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-9">
+                    <input asp-for="ApprovedBy" class="form-control" />
+                    <span asp-validation-for="ApprovedBy" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-secondary ml-5 mr-3">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
