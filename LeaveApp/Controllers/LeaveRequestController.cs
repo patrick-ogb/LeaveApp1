@@ -46,6 +46,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create()
         {
             LeaveRequestCreateViewModel leaveRequestCreateViewModel = new LeaveRequestCreateViewModel
@@ -57,18 +58,23 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create(LeaveRequestCreateViewModel model)
         {
-            LeaveRequest leaveRequest = new LeaveRequest
+            if(model.EmployeeList == null ||model.LeaveTypeList == null)
             {
-                EmployeeId = model.LeaveRequest.EmployeeId,
-                LeaveTypeId = model.LeaveRequest.LeaveTypeId,
-                ApprovalDate = model.LeaveRequest.ApprovalDate,
-                ApprovedBy = model.LeaveRequest.ApprovedBy
-            };
+                return View("NotFound");
+            }
+            LeaveRequest leaveRequest = new LeaveRequest
+                {
+                    EmployeeId = model.LeaveRequest.EmployeeId,
+                    LeaveTypeId = model.LeaveRequest.LeaveTypeId,
+                    ApprovalDate = model.LeaveRequest.ApprovalDate,
+                    ApprovedBy = model.LeaveRequest.ApprovedBy
+                };
+                var leaveReq = await leaveRequestService.AddLeaveRequest(leaveRequest);
 
-            var leaveReq = await leaveRequestService.AddLeaveRequest(leaveRequest);
-            return RedirectToAction("details", new { id = leaveReq.Id });
+                return RedirectToAction("details", new { id = leaveReq.Id });
         }
 
         [HttpGet]
@@ -93,6 +99,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> Edit(int? Id)
         {
             if (Id == null)
@@ -104,6 +111,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> Edit(LeaveRequest leaveRequestChange)
         {
             if (ModelState.IsValid)
@@ -116,6 +124,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> Delete(int? Id)
         {
             if (Id == null)
@@ -127,6 +136,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> Delete(int Id)
         {
             await leaveRequestService.DeleteLeaveRequest(Id);

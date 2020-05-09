@@ -10,6 +10,7 @@ namespace LeaveApp.ViewModel.AccountViewModel
     {
         [Required]
         [EmailAddress]
+        [Display(Name ="Enter You Email")]
         public string Email { get; set; }
     }
 }

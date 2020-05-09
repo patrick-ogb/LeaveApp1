@@ -73,17 +73,17 @@ namespace LeaveApp
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).AddXmlSerializerFormatters();
 
-            //services.AddAuthentication()
-            //    .AddGoogle(options =>
-            //    {
-            //        options.ClientId = "";
-            //        options.ClientSecret = "";
-            //    })
-            //    .AddFacebook(options =>
-            //    {
-            //        options.AppId = "";
-            //        options.AppSecret = "";
-            //    });
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "622172869564-5hoh46c7ko5voaj3e8og0btopggsutpm.apps.googleusercontent.com";
+                    options.ClientSecret = "WvlJdlSy7hPDr6y7GXdI9Qzw";
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = "1585795841584472";
+                    options.AppSecret = "2eb70f6b6231e321cf1b83eb6e75a702";
+                });
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -92,14 +92,15 @@ namespace LeaveApp
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("DeleteRolePolicy",
-                    policy => policy.RequireClaim("Delete Role"));
+                options.AddPolicy("CreateRolePolicy", policy => policy.RequireClaim("Create Role", "true"));
 
-                options.AddPolicy("EditRolePolicy",
-                    policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role", "true"));
 
-                options.AddPolicy("AdminRolePolicy",
-                    policy => policy.RequireRole("Admin"));
+                options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
+
+                options.AddPolicy("EditRolePolicy", policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+                options.AddPolicy("ManageRolesPolicy", policy => policy.Requirements.Add(new ManageAdminRolesAndClaimsRequirement()));
             });
 
 

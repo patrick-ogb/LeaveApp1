@@ -3,9 +3,9 @@
     ViewBag.Title = "Edit User in Role";
     var roleId = @ViewBag.roleId;
 }
-<form method="post">
+<form method="post" class="bcolor p-4">
     <div class="card-header">
-        <h2>Add or Remove User from Role</h2>
+        <h2 class="display-4 text-primary">Add or Remove User from Role</h2>
     </div>
     <div class="card-body">
         @for (int i = 0; i < Model.Count; i++)

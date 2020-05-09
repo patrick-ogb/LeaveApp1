@@ -391,6 +391,7 @@ namespace LeaveApp.Controllers
 
 
         [HttpGet]
+        [Authorize(Policy = "ManageRolesPolicy")]
         public async Task<IActionResult> ManageUserClaims(string userId)
         {
             ViewBag.roleId = userId;
@@ -424,6 +425,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ManageRolesPolicy")]
         public async Task<IActionResult> ManageUserClaims(UserClaimsViewModel model)
         {
             var user = await userManager.FindByIdAsync(model.UserId);

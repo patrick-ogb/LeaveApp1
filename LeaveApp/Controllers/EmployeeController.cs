@@ -46,6 +46,8 @@ namespace LeaveApp.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create()
         {
             EmployeeCreateViewModel employeeCreateViewModel = new EmployeeCreateViewModel
@@ -57,8 +59,13 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create(EmployeeCreateViewModel model)
         {
+            if(model.DepartmentList == null || model.LevelList == null)
+            {
+                return View("NotFound");
+            }
             Employee employee = new Employee
             {
                 FirstName = model.Employee.FirstName,
@@ -128,7 +135,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Policy = "DeleteRolePolicy")]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> Delete(int? Id)
         {
             if (Id == null)
@@ -139,7 +146,7 @@ namespace LeaveApp.Controllers
             return View(employee);
         }
         [HttpPost]
-        //[Authorize(Policy = "DeleteRolePolicy")]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> Delete(int Id)
         {
             await employeeService.DeleteEmployee(Id);

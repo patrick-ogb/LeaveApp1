@@ -9,7 +9,7 @@ namespace LeaveApp.Core.Entities
     {
         [Key]
         public int Id { get; set; }
-        [Required] //FOREIGN KEY
+        [Required(ErrorMessage ="Employee Id is Required")] //FOREIGN KEY
         public int EmployeeId { get; set; }
 
         [Required] //FOREIGN KEY
@@ -22,7 +22,7 @@ namespace LeaveApp.Core.Entities
         [Required]
         public DateTime ApprovalDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Name of approval is required")]
         public string ApprovedBy { get; set; }
     }
 }

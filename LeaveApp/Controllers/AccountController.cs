@@ -119,41 +119,49 @@ namespace LeaveApp.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
 
-            model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            if (ModelState.IsValid)
+            try
             {
-                //CODE TO CONFIRM EMAIL VIA LOCAL  LOGIN
-                var user = await userManager.FindByEmailAsync(model.Email);
-                if (user != null && !user.EmailConfirmed &&
-                    (await userManager.CheckPasswordAsync(user, model.Password)))
-                {
-                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
-                    return View(model);
-                }
+                model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password,
-                    model.RememberMe, true);
-
-                if (result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    //CODE TO CONFIRM EMAIL VIA LOCAL  LOGIN
+                    var user = await userManager.FindByEmailAsync(model.Email);
+                    if (user != null && !user.EmailConfirmed &&
+                        (await userManager.CheckPasswordAsync(user, model.Password)))
                     {
-                        return Redirect(returnUrl);
+                        ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                        return View(model);
                     }
-                    else
-                    {
-                        return RedirectToAction("Index", "Employee");
-                    }
-                }
 
-                if (result.IsLockedOut)
-                {
-                    return View("AccountLocked");
+                    var result = await signInManager.PasswordSignInAsync(model.Email, model.Password,
+                        model.RememberMe, true);
+
+                    if (result.Succeeded)
+                    {
+                        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Employee");
+                        }
+                    }
+
+                    if (result.IsLockedOut)
+                    {
+                        return View("AccountLocked");
+                    }
+                    ModelState.AddModelError(string.Empty, "Invalid Login Atempt");
                 }
-                ModelState.AddModelError(string.Empty, "Invalid Login Atempt");
+                return View(model);
             }
-            return View(model);
+            catch (Exception)
+            {
+
+                return Redirect("NotFound");
+            }
         }
 
         [AllowAnonymous]

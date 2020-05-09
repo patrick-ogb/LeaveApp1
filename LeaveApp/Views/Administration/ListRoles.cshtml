@@ -5,14 +5,14 @@
 @{
     ViewData["Title"] = "All Roles";
 }
-<div class="display-4">All Roles</div>
+<div class="display-4 text-primary">All Roles</div>
 
 @if (Model.Any())
 {
     <a class="btn btn-outline-primary mb-3" asp-action="CreateRole" asp-controller="Administration">Create Role</a>
     foreach (var role in Model)
     {
-        <div class="card mb-3 col-sm-12">
+        <div class="card mb-3 col-sm-12 bcolor p-4">
             <div class="card-header">
                 Role Id: @role.Id
             </div>
@@ -52,7 +52,7 @@
 }
 else
 {
-    <div class="card col-sm-12">
+    <div class="card col-sm-12 bcolor p-4">
         <div class="card-header">
             No role created yet
         </div>
@@ -66,6 +66,7 @@ else
         </div>
     </div>
 }
+
 @section Scripts{
     <script src="~/js/CustomScript.js"></script>
 }

@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "All Users";
 }
-<h1>All Users</h1>
+<h1 class="display-4 text-primary">All Users</h1>
 @if (Model.Any())
 {
     <a asp-action="Register" asp-controller="Account"
@@ -12,7 +12,7 @@
     </a>
     foreach (var user in Model)
     {
-        <div class="card mb-3">
+        <div class="card mb-3 bcolor p-4">
             <div class="card-header">
                 User Id: @user.Id
             </div>

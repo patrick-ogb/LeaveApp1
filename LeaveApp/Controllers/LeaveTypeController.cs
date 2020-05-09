@@ -27,12 +27,14 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CreateRolePolicy")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create(LeaveTypeCreateViewModel model)
         {
             if (ModelState.IsValid)
@@ -75,6 +77,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> Edit(int? Id)
         {
             if (Id == null)
@@ -86,6 +89,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> Edit(LeaveType leaveTypeChange)
         {
             if (ModelState.IsValid)
@@ -98,6 +102,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> Delete(int? Id)
         {
             if (Id == null)
@@ -108,6 +113,7 @@ namespace LeaveApp.Controllers
             return View(leaveType);
         }
         [HttpPost]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> Delete(int Id)
         {
             await leaveTypeService.DeleteLeaveType(Id);

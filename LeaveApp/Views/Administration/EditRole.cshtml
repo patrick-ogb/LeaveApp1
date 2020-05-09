@@ -2,18 +2,18 @@
 @{
     ViewBag.Title = "Edit Role";
 }
-<h1>Edit Role</h1>
+<h1 class="display-4 text-primary">Edit Role</h1>
 
-<form method="post" class="mt-3">
+<form method="post" class="mt-3 bcolor p-4">
     <div class="form-group row">
-        <label asp-for="Id" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
+        <label asp-for="Id" class="col-sm-1 col-form-label"></label>
+        <div class="col-sm-11">
             <input asp-for="Id" disabled class="form-control" />
         </div>
     </div>
     <div class="form-group row">
-        <label asp-for="RoleName" class="form-control"></label>
-        <div class="col-sm-10">
+        <label asp-for="RoleName" class="col-sm-1 col-form-label"></label>
+        <div class="col-sm-11">
             <input asp-for="RoleName" class="form-control" />
             <span asp-validation-for="RoleName" class="text-danger"></span>
         </div>
