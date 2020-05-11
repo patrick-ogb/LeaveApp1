@@ -8,9 +8,9 @@ namespace LeaveApp.ViewModel.AccountViewModel
 {
     public class ForgotPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="The email field is required")]
         [EmailAddress]
-        [Display(Name ="Enter You Email")]
+        [Display(Name ="Enter Your Email")]
         public string Email { get; set; }
     }
 }

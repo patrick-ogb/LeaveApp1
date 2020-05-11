@@ -33,11 +33,11 @@ namespace LeaveApp.Core.Entities
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Please select department")] //FOREIGN KEY
-        [Display(Name = "Department Id")]
+        [Display(Name = "Department")]
         public int DepartmentId { get; set; }
 
         [Required(ErrorMessage = "Please select level")] //FOREIGN KEY
-        [Display(Name = "Level Id")]
+        [Display(Name = "Level")]
         public int LevelId { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public DateTime DateModified { get; set; } = DateTime.UtcNow;

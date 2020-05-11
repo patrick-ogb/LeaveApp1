@@ -7,8 +7,16 @@
       "destination": "wwwroot/lib/datatables/"
     },
     {
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/"
+    },
+    {
+      "library": "jquery-validate@1.19.1",
+      "destination": "wwwroot/lib/"
+    },
+    {
       "library": "jquery@3.5.1",
-      "destination": "wwwroot/lib/jquery/"
+      "destination": "wwwroot/lib/"
     }
   ]
 }

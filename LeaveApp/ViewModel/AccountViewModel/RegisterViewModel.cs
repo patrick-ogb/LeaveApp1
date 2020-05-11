@@ -12,7 +12,6 @@ namespace LeaveApp.ViewModel.AccountViewModel
         [Required]
         [DataType(DataType.EmailAddress)]
         [Remote(action: "IsEmailInUse", controller: "Account")]
-        //[ValidEmailDomain(allowedDomain:"noble.com",ErrorMessage = "Email must be noble.com")]
         public string Email { get; set; }
 
         [Required]

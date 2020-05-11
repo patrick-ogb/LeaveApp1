@@ -31,9 +31,6 @@
         <thead>
             <tr class="table-secondary">
                 <th>
-                    Id
-                </th>
-                <th>
                     FirstName
                 </th>
                 <th>
@@ -66,9 +63,6 @@
             @foreach (var emp in result)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(model => emp.Id)
-                    </td>
                     <td>
                         @Html.DisplayFor(model => emp.FirstName)
                     </td>

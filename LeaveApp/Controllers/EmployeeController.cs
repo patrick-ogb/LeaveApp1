@@ -62,10 +62,6 @@ namespace LeaveApp.Controllers
         [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create(EmployeeCreateViewModel model)
         {
-            if(model.DepartmentList == null || model.LevelList == null)
-            {
-                return View("NotFound");
-            }
             Employee employee = new Employee
             {
                 FirstName = model.Employee.FirstName,

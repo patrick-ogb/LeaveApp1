@@ -36,7 +36,6 @@ namespace LeaveApp.Controllers
             return RedirectToAction("index", "home");
         }
 
-
         [AllowAnonymous]
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsEmailInUse(string email)
@@ -70,21 +69,17 @@ namespace LeaveApp.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     City = model.City
-
                 };
                 var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Account",
-                        new { userId = user.Id, token }, Request.Scheme);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token }, Request.Scheme);
                     await emailService.SendAsync("ogbadapat@gmail.ocm", "Local Email Verification Link", confirmationLink);
+
                     logger.Log(LogLevel.Warning, confirmationLink);
 
-                    //Task: Write code to sign in the user before verifying if the user is sign in and is in role
-                    //var signInResult =  await signInManager.PasswordSignInAsync(user, model.Password, false, false);
                     if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         return RedirectToAction("ListUsers", "Administration");

@@ -9,8 +9,11 @@ namespace LeaveApp.ViewModel.LeaveRequestViewModel
 {
     public class LeaveRequestCreateViewModel
     {
+        [Required]
         public LeaveRequest LeaveRequest { get; set; }
+        [Required]
         public List<LeaveType> LeaveTypeList { get; set; }
+        [Required]
         public List<Employee> EmployeeList { get; set; }
     }
 }
