@@ -1,4 +1,4 @@
-﻿@model LeaveTypeCreateViewModel
+﻿@model LeaveTypeDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,13 +7,14 @@
 <h1 class="text-center display-4 text-primary">LEAVE TYPE DETAILS</h1>
 <hr />
 
-<div class="row justify-content-around m-3">
+<div class="row">
+    <div class="col-sm-2"></div>
     <div class="col-sm-8">
         <div class="card mt-3">
             <div class="card-header">
                 <h1 class="text-center"> @Model.LeaveType.Name</h1>
             </div>
-            <div class="card-body text-center">
+            <div class="card-body" style="margin-left: 35%;">
                 <h4>LeaveType ID: @Model.LeaveType.Id</h4>
                 <h4>Number Of Days: @Model.LeaveType.NumberOfDays</h4>
                 <h4>Description: @Model.LeaveType.Discription</h4>
@@ -22,9 +23,9 @@
             </div>
             <div class="card-footer text-center">
                 <a asp-controller="LeaveType" asp-action="Index" class="btn btn-outline-primary">Back</a>
-                <a asp-action="Edit" asp-controller="LeaveType" asp-route-id="@Model.LeaveType.Id"
+                <a asp-action="Edit" asp-controller="LeaveType" asp-route-id="@Model.EncryptedId"
                    class="btn btn-outline-success">Edit</a>
-                <a asp-action="Delete" asp-controller="LeaveType" asp-route-id="@Model.LeaveType.Id" class="btn btn-outline-danger">Delete</a>
+                <a asp-action="Delete" asp-controller="LeaveType" asp-route-id="@Model.EncryptedId" class="btn btn-outline-danger">Delete</a>
             </div>
         </div>
     </div>

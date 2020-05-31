@@ -76,7 +76,16 @@ namespace LeaveApp.Controllers
                 {
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token }, Request.Scheme);
-                    await emailService.SendAsync("ogbadapat@gmail.ocm", "Local Email Verification Link", confirmationLink);
+
+                    //try
+                    //{
+                    //    await emailService.SendAsync("ogbadapat@gmail.ocm", "Local Email Verification Link", confirmationLink);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    ViewBag.ErrorMessage = $"Unable to send Email Confirmation link becuse the email server could not be reach. {ex.Message}";
+                    //    return View("CustomError");
+                    //}
 
                     logger.Log(LogLevel.Warning, confirmationLink);
 
@@ -87,7 +96,7 @@ namespace LeaveApp.Controllers
                     ViewBag.ErrorTitle = "Registration successful";
                     ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
                         "email, by clicking on the confirmation link we have emailed to you";
-                    return View("NotFound");
+                    return View("Info");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -233,12 +242,21 @@ namespace LeaveApp.Controllers
                             new { userId = user.Id, token = token }, Request.Scheme);
 
                         logger.Log(LogLevel.Warning, confirmationLink);
-                        await emailService.SendAsync("ogbadapat@gmail.ocm", "External Email Verification Link", confirmationLink);
+
+                        try
+                        {
+                            await emailService.SendAsync("ogbadapat@gmail.ocm", "External Email Verification Link", confirmationLink);
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.ErrorMessage = $"Unable to send Email Confirmation link becuse the email server could not be reach. {ex.Message}";
+                            return View("CustomError");
+                        }
 
                         ViewBag.ErrorTitle = "Registration successful";
                         ViewBag.ErrorMessage = "Before You can Login, " +
                             "Please confirm your email, by clicking on the cofirmation link we have emailed you";
-                        return View("NotFound");
+                        return View("Info");
                     }
 
                     await userManager.AddLoginAsync(user, info);
@@ -297,9 +315,18 @@ namespace LeaveApp.Controllers
                     var passwordResetLink = Url.Action("ResetPassword", "Account",
                         new { email = model.Email, token = token }, Request.Scheme);
 
-                    logger.Log(LogLevel.Warning, passwordResetLink);
+                    try
+                    {
                     await emailService.SendAsync("ogbadapat@gmail.ocm", "Password Reset Link", passwordResetLink);
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.ErrorMessage = $"Unable to send Email Confirmation link becuse the email server could not be reach. {ex.Message}";
+                        return View("CustomError");
+                    }
 
+
+                    logger.Log(LogLevel.Warning, passwordResetLink);
                     return View("ForgotPasswordConfirmation");
                 }
                 return View("ForgotPasswordConfirmation");

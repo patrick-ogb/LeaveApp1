@@ -1,18 +1,32 @@
 ﻿@model LeaveRequestDetailsViewModel
-
+@inject IDataProtectionProvider dataProtectionProvider
+@inject DataProtecionPurposeStrings dataProtecionPurposeStrings
 @{
     ViewData["Title"] = "Details";
+    IDataProtector protector;
+    protector = dataProtectionProvider.CreateProtector(dataProtecionPurposeStrings.EmployeeIdRouteValue);
+    var Id = Model.EncryptedId;
+    int decryptedId;
+    int y;
+    if (int.TryParse(Id, out y))
+    {
+        decryptedId = y;
+    }
+    else
+    {
+        decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+    }
 }
-
 <h1 class="text-center text-primary display-4">Details</h1>
 
-<div class="row justify-content-around m-3">
+<div class="row">
+    <div class="col-sm-2"></div>
     <div class="col-sm-8">
         <div class="card mt-3">
             <div class="card-header">
                 <h1 class="text-center"> @Model.LeaveRequest.ApprovedBy</h1>
             </div>
-            <div class="card-body text-center">
+            <div class="card-body" style="margin-left: 35%;">
                 <h4>Department ID: @Model.LeaveRequest.Id</h4>
                 <h4>Description: @Model.LeaveRequest.EmployeeId</h4>
                 <h4>Date Created: @Model.LeaveRequest.RequestDate</h4>
@@ -20,10 +34,10 @@
                 <h4>Date Modified: @Model.LeaveRequest.LeaveTypeId</h4>
             </div>
             <div class="card-footer text-center">
-                <a asp-controller="Level" asp-action="Index" class="btn btn-outline-primary">Back</a>
-                <a asp-action="Edit" asp-controller="Level" asp-route-id="@Model.LeaveRequest.Id"
+                <a asp-controller="LeaveRequest" asp-action="Index" class="btn btn-outline-primary">Back</a>
+                <a asp-action="Edit" asp-controller="LeaveRequest" asp-route-id="@Model.EncryptedId"
                    class="btn btn-outline-success">Edit</a>
-                <a asp-action="Delete" asp-controller="Level" asp-route-id="@Model.LeaveRequest.Id" class="btn btn-outline-danger">Delete</a>
+                <a asp-action="Delete" asp-controller="LeaveRequest" asp-route-id="@Model.EncryptedId" class="btn btn-outline-danger">Delete</a>
             </div>
         </div>
     </div>

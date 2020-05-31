@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace LeaveApp.ViewModel.DepartmentViewModel
 {
-    public class DepartmentDetailsViewModel
+    public class DepartmentEditViewModel : Department
     {
-        public Department Department { get; set; }
-        public string PageTitle { get; set; }
-        public string EncryptedId { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace LeaveApp.ViewModel.EmployeeViewModel
     {
         public Employee Employee { get; set; }
         public Department DeptName { get; set; }
+        public Level Level { get; set; }
         public string PageTitle { get; set; }
+        public string EncryptedId { get; set; }
     }
 }

@@ -26,6 +26,9 @@
               asp-fallback-test-property="position"
               asp-fallback-test-value="absolute"
               asp-suppress-fallback-integrity="true">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/b-1.4.2/b-html5-1.4.2/b-print-1.4.2/sl-1.2.3/datatables.min.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/b-1.4.2/b-html5-1.4.2/b-print-1.4.2/sl-1.2.3/datatables.min.js"></script>
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
 
@@ -59,9 +62,8 @@
                                 <a class="nav-link" asp-area="" asp-controller="LeaveRequest" asp-action="Index">LeaveRequest</a>
                             </li>
 
-                            @*Manage user Roles and Claims*@
-                            @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                            {
+                            @*@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                            {*@
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -81,7 +83,7 @@
                                            asp-action="ChangePassword"> Password</a>
                                     </div>
                                 </li>
-                            }
+                            @*}*@
 
 
                         </ul>

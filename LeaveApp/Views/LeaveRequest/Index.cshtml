@@ -20,8 +20,8 @@
                      EmpFirstName = employee.FirstName,
                      EmpLastName = employee.LastName,
                      EmployeeId = employee.Id,
-                     LeaveType = leaveType.Name
-
+                     LeaveType = leaveType.Name,
+                     LeaveRequestEncryptedId = leaveRequest.LeveRequestEncryptedId
                  };
 }
 <table id="tableId" class="table table-striped border">
@@ -79,9 +79,9 @@
                     @Html.DisplayFor(modelItem => item.ApprovedBy)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-primary ml-2 m-1 " })
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-success m-1 " })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger m-1 " })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.LeaveRequestEncryptedId }, new { @class = "btn btn-outline-primary ml-2 m-1 " })
+                    @Html.ActionLink("Details", "Details", new { id = item.LeaveRequestEncryptedId }, new { @class = "btn btn-outline-success m-1 " })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.LeaveRequestEncryptedId }, new { @class = "btn btn-outline-danger m-1 " })
                 </td>
             </tr>
         }

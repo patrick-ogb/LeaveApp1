@@ -1,0 +1,11 @@
+﻿@model string
+<h1 class="display-3 text-danger">Info:</h1>
+
+<div class="alert alert-danger mt-1 mb-1">
+    <h4>@ViewBag.ErrorTitle </h4>
+    <h4> @ViewBag.ErrorMessage </h4>
+    <br />
+    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-success">
+        Click here to go back to home page
+    </a>
+</div>

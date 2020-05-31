@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace LeaveApp.ViewModel.LevelViewModel
 {
-    public class LevelDetailsViewModel
+    public class LevelEditViewModel : Level
     {
-        public Level Level { get; set; }
-        public string PageTitle { get; set; }
-        public string EncryptedId { get; set; }
+        public new string Id { get; set; }
     }
 }

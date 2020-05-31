@@ -12,7 +12,7 @@ namespace LeaveApp.Core.Entities
         public int Id { get; set; }
 
         [NotMapped]
-        public string EncryptedId { get; set; }
+        public string EmployeeEncryptedId { get; set; }
 
         [Required(ErrorMessage = "First Name Required")]
         [Display(Name = "First Name")]
@@ -39,8 +39,14 @@ namespace LeaveApp.Core.Entities
         [Required(ErrorMessage = "Please select level")] //FOREIGN KEY
         [Display(Name = "Level")]
         public int LevelId { get; set; }
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-        public DateTime DateModified { get; set; } = DateTime.UtcNow;
+
+        [Required(ErrorMessage = "Date Created is required")]
+        [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime DateCreated { get; set; }
+
+        [Display(Name = "Date Created")]
+        [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime DateModified { get; set; } 
 
         [ForeignKey("EmployeeId")]
         public ICollection<LeaveRequest> LeaveRequests { get; set; }

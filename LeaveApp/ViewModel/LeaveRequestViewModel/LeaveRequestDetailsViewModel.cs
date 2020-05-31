@@ -10,5 +10,6 @@ namespace LeaveApp.ViewModel.LeaveRequestViewModel
     {
         public LeaveRequest LeaveRequest { get; set; }
         public string PageTitle { get; set; }
+        public string EncryptedId { get; set; }
     }
 }

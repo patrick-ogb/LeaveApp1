@@ -1,32 +1,43 @@
 ﻿@model EmployeeDetailsViewModel
-
+@inject IDataProtectionProvider dataProtectionProvider
+@inject DataProtecionPurposeStrings dataProtecionPurposeStrings
 @{
     ViewData["Title"] = "Details";
+    IDataProtector protector;
+    protector = dataProtectionProvider.CreateProtector(dataProtecionPurposeStrings.EmployeeIdRouteValue);
+    var Id = Model.EncryptedId;
+    int decryptedId;
+    int y;
+    if (int.TryParse(Id, out y))
+    {
+        decryptedId = y;
+    }
+    else
+    {
+        decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+    }
 }
-
-<h1 class="text-primary text-center display-4">EMPLOYEE DETAILS</h1>
-<hr />
-
-<div class="row justify-content-around m-3">
-    <div class="col-sm-12">
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
         <div class="card mt-3">
             <div class="card-header">
                 <h1 class="text-center"> <span>@Model.Employee.FirstName  </span><span>@Model.Employee.LastName</span></h1>
             </div>
-            <div class="card-body text-center">
-                <h4>Department ID: @Model.Employee.Id</h4>
+            <div class="card-body" style="margin-left: 35%;">
+                <h4>Employee ID: @Model.Employee.Id</h4>
                 <h4>Email: @Model.Employee.Email</h4>
                 <h4>Phone: @Model.Employee.Phone</h4>
                 <h4>Department: @Model.DeptName.Name</h4>
-                <h4>Level: @Model.Employee.LevelId</h4>
+                <h4>Level: @Model.Level.Name</h4>
                 <h4>Date Created: @Model.Employee.DateCreated</h4>
                 <h4>Date Modified: @Model.Employee.DateModified</h4>
             </div>
             <div class="card-footer text-center">
                 <a asp-controller="Employee" asp-action="Index" class="btn btn-outline-primary">Back</a>
-                <a asp-action="Edit" asp-controller="Employee" asp-route-id="@Model.Employee.Id"
+                <a asp-action="Edit" asp-controller="Employee" asp-route-id="@Model.EncryptedId"
                    class="btn btn-outline-success">Edit</a>
-                <a asp-action="Delete" asp-controller="Employee" asp-route-id="@Model.Employee.Id" class="btn btn-outline-danger">Delete</a>
+                <a asp-action="Delete" asp-controller="Employee" asp-route-id="@Model.EncryptedId" class="btn btn-outline-danger">Delete</a>
             </div>
         </div>
     </div>

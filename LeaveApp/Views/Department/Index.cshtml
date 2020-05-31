@@ -49,9 +49,9 @@
                     @Html.DisplayFor(modelItem => item.DateModified)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-primary ml-2 m-1 " })
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-success m-1 " })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger m-1 " })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.DepartmentEncryptedId }, new { @class = "btn btn-outline-primary ml-2 m-1 " })
+                    @Html.ActionLink("Details", "Details", new { id = item.DepartmentEncryptedId }, new { @class = "btn btn-outline-success m-1 " })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.DepartmentEncryptedId }, new { @class = "btn btn-outline-danger m-1 " })
                 </td>
             </tr>
         }

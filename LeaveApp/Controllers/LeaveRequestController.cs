@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LeaveApp.Core.Entities;
+using LeaveApp.Security;
 using LeaveApp.Service.Abstract;
 using LeaveApp.ViewModel.LeaveRequestViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaveApp.Controllers
@@ -15,14 +17,18 @@ namespace LeaveApp.Controllers
         private readonly ILeaveRequestService leaveRequestService;
         private readonly ILeaveTypeService leaveTypeService;
         private readonly IEmployeeService employeeService;
+        private readonly IDataProtector protector;
 
         public LeaveRequestController(ILeaveRequestService leaveRequestService,
                                         ILeaveTypeService leaveTypeService,
-                                        IEmployeeService employeeService)
+                                        IEmployeeService employeeService,
+                                        IDataProtectionProvider dataProtectionProvider,
+                                        DataProtecionPurposeStrings dataProtecionPurposeStrings)
         {
             this.leaveRequestService = leaveRequestService;
             this.leaveTypeService = leaveTypeService;
             this.employeeService = employeeService;
+            protector = dataProtectionProvider.CreateProtector(dataProtecionPurposeStrings.EmployeeIdRouteValue);
         }
 
         [AllowAnonymous]
@@ -30,23 +36,33 @@ namespace LeaveApp.Controllers
         {
             try
             {
-                LeaveRequestListViewModel leaveRequestListViewModel = new LeaveRequestListViewModel
+                IEnumerable<LeaveRequest> leaveRequests = (await leaveRequestService.GetLeaveRequests()).Select(lvlRequst =>
                 {
-                    Employees = await employeeService.GetEmployees(),
-                    LeaveTypes = await leaveTypeService.GetLeaveTypes(),
-                    LeaveRequests = await leaveRequestService.GetLeaveRequests()
-                };
-                return View(leaveRequestListViewModel);
-            }
-            catch (Exception)
-            {
+                    lvlRequst.LeveRequestEncryptedId = protector.Protect(lvlRequst.Id.ToString());
+                    return lvlRequst;
+                });
 
-                return View("NotFound");
+                var leaveTypes = await leaveTypeService.GetLeaveTypes();
+                var employees = await employeeService.GetEmployees();
+
+                LeaveRequestListViewModel model = new LeaveRequestListViewModel
+                {
+                    Employees = employees,
+                    LeaveTypes = leaveTypes,
+                    LeaveRequests = leaveRequests
+                };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorTitle = "Resource not available:";
+                ViewBag.ErrorMessage = ex.Message;
+                return View("CustomError");
             }
         }
 
         [HttpGet]
-        [Authorize(Policy = "CreateRolePolicy")]
+        //[Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create()
         {
             LeaveRequestCreateViewModel leaveRequestCreateViewModel = new LeaveRequestCreateViewModel
@@ -58,7 +74,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "CreateRolePolicy")]
+        //[Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create(LeaveRequestCreateViewModel model)
         {
             LeaveRequest leaveRequest = new LeaveRequest
@@ -75,68 +91,142 @@ namespace LeaveApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? Id)
+        public async Task<IActionResult> Details(string Id)
         {
-            var leaveRequest = await leaveRequestService.GetLeaveRequest(Id.Value);
+            int decryptedId;
+            int y;
+            if (int.TryParse(Id, out y))
+            {
+                decryptedId = y;
+            }
+            else
+            {
+                decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+            }
+            var leaveRequest = await leaveRequestService.GetLeaveRequest(decryptedId);
             if (leaveRequest == null)
             {
-                return View("NotFound", Id.Value);
+                return View("NotFound", decryptedId);
             }
-            if (Id == null)
+            if (decryptedId < 1)
             {
                 return RedirectToAction("Index");
             }
             LeaveRequestDetailsViewModel leaveRequestDetailsViewModel = new LeaveRequestDetailsViewModel
             {
                 LeaveRequest = leaveRequest,
+                EncryptedId = Id,
                 PageTitle = "LEAVEREQUEST DETAILS"
             };
             return View(leaveRequestDetailsViewModel);
         }
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
-        public async Task<IActionResult> Edit(int? Id)
+       // [Authorize(Policy = "EditRolePolicy")]
+        public async Task<IActionResult> Edit(string Id)
         {
-            if (Id == null)
+            int decryptedId;
+            int y;
+            if (int.TryParse(Id, out y))
+            {
+                decryptedId = y;
+            }
+            else
+            {
+                decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+            }
+
+            if (decryptedId < 1)
             {
                 return RedirectToAction("Index");
             }
-            var leaveRequest = await leaveRequestService.GetLeaveRequest(Id.Value);
-            return View(leaveRequest);
+
+            var employees = await employeeService.GetEmployees();
+            var leaveTyes = await leaveTypeService.GetLeaveTypes();
+            LeaveRequest leaveRequest = await leaveRequestService.GetLeaveRequest(decryptedId);
+            LeaveRequestEditViewModel model = new LeaveRequestEditViewModel
+            {
+                Id = Id,
+                ApprovalDate = leaveRequest.ApprovalDate,
+                EmployeeId = leaveRequest.EmployeeId,
+                RequestDate = leaveRequest.RequestDate,
+                ApprovedBy = leaveRequest.ApprovedBy,
+                LeaveTypeId = leaveRequest.LeaveTypeId,
+                LeveRequestEncryptedId = Id,
+                EmployeeList = employees,
+                LeaveTypeList = leaveTyes
+            };
+            return View(model);
         }
 
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
-        public async Task<IActionResult> Edit(LeaveRequest leaveRequestChange)
+        //[Authorize(Policy = "EditRolePolicy")]
+        public async Task<IActionResult> Edit(LeaveRequestEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await leaveRequestService.UpdateLeaveRequest(leaveRequestChange);
+                int decryptedId;
+                int y;
+                if (int.TryParse(model.Id, out y))
+                {
+                    decryptedId = y;
+                }
+                else
+                {
+                    decryptedId = Convert.ToInt32(protector.Unprotect(model.Id));
+                }
 
-                return RedirectToAction("Index");
+                LeaveRequest leaveReqiuest = await leaveRequestService.GetLeaveRequest(decryptedId);
+                leaveReqiuest.LeaveTypeId = model.LeaveTypeId;
+                leaveReqiuest.ApprovalDate = model.ApprovalDate;
+                leaveReqiuest.ApprovedBy = model.ApprovedBy;
+                leaveReqiuest.EmployeeId = model.EmployeeId;
+                leaveReqiuest.RequestDate = model.RequestDate;
+                leaveReqiuest.LeveRequestEncryptedId = model.LeveRequestEncryptedId;
+                try
+                {
+                await leaveRequestService.UpdateLeaveRequest(leaveReqiuest);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(string.Empty, " Ensure Id, EmployeeId and LeaveTypeId are Valid");
+                }
+
+                return View(model);
             }
-            return View(leaveRequestChange);
+            return View(model);
         }
 
         [HttpGet]
-        [Authorize(Policy = "DeleteRolePolicy")]
-        public async Task<IActionResult> Delete(int? Id)
+        //[Authorize(Policy = "DeleteRolePolicy")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (Id == null)
+            int lvlRequestDecryptedId = Convert.ToInt32(protector.Unprotect(Id));
+            if (lvlRequestDecryptedId < 1)
             {
                 return RedirectToAction("Index");
             }
-            var leaveRequest = await leaveRequestService.GetLeaveRequest(Id.Value);
+            var leaveRequest = await leaveRequestService.GetLeaveRequest(lvlRequestDecryptedId);
             return View(leaveRequest);
         }
 
         [HttpPost]
-        [Authorize(Policy = "DeleteRolePolicy")]
-        public async Task<IActionResult> Delete(int Id)
+        //[Authorize(Policy = "DeleteRolePolicy")]
+        public async Task<IActionResult> Delete(string Id, int ids = 0)
         {
-            await leaveRequestService.DeleteLeaveRequest(Id);
-            return RedirectToAction("Index");
+            int lvlRequestDecryptedId = Convert.ToInt32(protector.Unprotect(Id));
+
+            try
+            {
+                await leaveRequestService.DeleteLeaveRequest(lvlRequestDecryptedId);
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorMessage = $"The Leave Request cannot be deleted becouse of reference constraint of his/her Id in another database";
+                return View("CustomError");
+            }
         }
     }
 }

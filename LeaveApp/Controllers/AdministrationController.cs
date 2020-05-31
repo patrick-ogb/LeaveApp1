@@ -15,7 +15,7 @@ using LeaveApp.Core;
 
 namespace LeaveApp.Controllers
 {
-    [Authorize(Policy = "AdminRolePolicy")]
+    //[Authorize(Policy = "AdminRolePolicy")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -82,7 +82,7 @@ namespace LeaveApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+       // [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(string Id)
         {
             var role = await roleManager.FindByIdAsync(Id);
@@ -195,11 +195,21 @@ namespace LeaveApp.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"The User with Id = {Id} cannot be found";
-                return View("NotFound");
+                return View("CustomError");
             }
             else
             {
-                var result = await userManager.DeleteAsync(user);
+                IdentityResult result = null;
+                try
+                {
+                     result = await userManager.DeleteAsync(user);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorTitle = $"Unable to delete user: {user.UserName}";
+                    ViewBag.ErrorMessage = ex.Message;
+                    return View("CustomError");
+                }
                 if (result.Succeeded)
                 {
                     return RedirectToAction("ListUsers");
@@ -214,7 +224,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "DeleteRolePolicy")]
+       // [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> DeleteRole(string Id)
         {
             var role = await roleManager.FindByIdAsync(Id);
@@ -246,7 +256,7 @@ namespace LeaveApp.Controllers
                     ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are users" +
                         $" in this role. If you want to delete this role, first remove all users in this " +
                         $"role and try again";
-                    return View("ErrorMessage");
+                    return View("CustomError");
                 }
             }
 
@@ -254,7 +264,7 @@ namespace LeaveApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.roleId = roleId;
@@ -288,7 +298,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
         {
             var role = await roleManager.FindByIdAsync(roleId);
@@ -330,7 +340,7 @@ namespace LeaveApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+       // [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.userId = userId;
@@ -391,7 +401,7 @@ namespace LeaveApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "ManageRolesPolicy")]
+        //[Authorize(Policy = "ManageRolesPolicy")]
         public async Task<IActionResult> ManageUserClaims(string userId)
         {
             ViewBag.roleId = userId;
@@ -425,7 +435,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "ManageRolesPolicy")]
+       // [Authorize(Policy = "ManageRolesPolicy")]
         public async Task<IActionResult> ManageUserClaims(UserClaimsViewModel model)
         {
             var user = await userManager.FindByIdAsync(model.UserId);

@@ -110,8 +110,12 @@ namespace LeaveApp
 
             var mailKiteOption = Configuration.GetSection("Email").Get<MailKitOptions>();
             services.AddMailKit(config => config.UseMailKit(mailKiteOption));
+            services.AddSingleton<DataProtecionPurposeStrings>();
+            services.AddDataProtection();
 
         }
+
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

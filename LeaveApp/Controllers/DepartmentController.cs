@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LeaveApp.Core.Entities;
+using LeaveApp.Security;
 using LeaveApp.Service.Abstract;
 using LeaveApp.ViewModel.DepartmentViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaveApp.Controllers
@@ -13,17 +15,25 @@ namespace LeaveApp.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentService departmentService;
+        private readonly IDataProtector  protector;
 
-        public DepartmentController(IDepartmentService departmentService)
+        public DepartmentController(IDepartmentService departmentService,
+                                        IDataProtectionProvider dataProtectionProvider,
+                                    DataProtecionPurposeStrings dataProtecionPurposeStrings)
         {
             this.departmentService = departmentService;
+            protector = dataProtectionProvider.CreateProtector(dataProtecionPurposeStrings.EmployeeIdRouteValue);
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var department = await departmentService.GetDepartments();
-            return View(department);
+            IEnumerable<Department> departments = (await departmentService.GetDepartments()).Select(dept =>
+            {
+                dept.DepartmentEncryptedId = protector.Protect(dept.Id.ToString());
+                return dept;
+            });
+            return View(departments);
         }
 
         [HttpGet]
@@ -34,7 +44,7 @@ namespace LeaveApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "CreateRolePolicy")]
+        //[Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> Create(DepartmentCreateViewModel model)
         {
             if (ModelState.IsValid)
@@ -56,12 +66,24 @@ namespace LeaveApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? Id)
+        public async Task<IActionResult> Details(string Id)
         {
-            var department = await departmentService.GetDepartment(Id.Value);
+            int decryptedId;
+            int y;
+            if (int.TryParse(Id, out y))
+            {
+                decryptedId = y;
+            }
+            else
+            {
+                decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+            }
+
+            var department = await departmentService.GetDepartment(decryptedId);
+            
             if (department == null)
             {
-                return View("NotFound", Id.Value);
+                return View("NotFound", decryptedId);
             }
             if (Id == null)
             {
@@ -70,6 +92,7 @@ namespace LeaveApp.Controllers
             DepartmentDetailsViewModel departmentDetailsViewModel = new DepartmentDetailsViewModel
             {
                 Department = department,
+                EncryptedId = Id,
                 PageTitle = "DEPARTMENT DETAILS"
             };
             return View(departmentDetailsViewModel);
@@ -77,48 +100,109 @@ namespace LeaveApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
-        public async Task<IActionResult> Edit(int? Id)
+        //[Authorize(Policy = "EditRolePolicy")]
+        public async Task<IActionResult> Edit(string Id)
         {
-            if (Id == null)
+            int decryptedId;
+            int y;
+            if (int.TryParse(Id, out y))
+            {
+                decryptedId = y;
+            }
+            else
+            {
+                decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+            }
+
+            if (decryptedId < 1)
             {
                 return RedirectToAction("Index");
             }
-            var department = await departmentService.GetDepartment(Id.Value);
-            return View(department);
+
+            Department department = await departmentService.GetDepartment(decryptedId);
+            DepartmentEditViewModel model = new DepartmentEditViewModel
+            {
+                Id = Id,
+                Name = department.Name,
+                DepartmentEncryptedId = Id
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
-        public async Task<IActionResult> Edit(Department departmentChange)
+        //[Authorize(Policy = "EditRolePolicy")]
+        public async Task<IActionResult> Edit(DepartmentEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await departmentService.UpdateDepartment(departmentChange);
+                int decryptedId;
+                int y;
+                if (int.TryParse(model.Id, out y))
+                {
+                    decryptedId = y;
+                }
+                else
+                {
+                    decryptedId = Convert.ToInt32(protector.Unprotect(model.Id));
+                }
 
-                return RedirectToAction("Index");
+                if (decryptedId < 1)
+                {
+                    ModelState.AddModelError(string.Empty, "Id can't be 0 or nagative number!");
+                    return View(model);
+                }
+
+                Department department = await departmentService.GetDepartment(decryptedId);
+                department.Name = model.Name;
+                department.Description = model.Description;
+                department.DateCreated = model.DateCreated;
+                department.DateModified = model.DateModified;
+                try
+                {
+
+                    await departmentService.UpdateDepartment(department);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid input detected. please ensure the input data are correct");
+                }
+
+                return View(model);
             }
-            return View(departmentChange);
+            return View(model);
         }
 
         [HttpGet]
-        [Authorize(Policy = "DeleteRolePolicy")]
-        public async Task<IActionResult> Delete(int? Id)
+        //[Authorize(Policy = "DeleteRolePolicy")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (Id == null)
+            int deptDecryptedId = Convert.ToInt32(protector.Unprotect(Id));
+            if (deptDecryptedId < 1)
             {
                 return RedirectToAction("Index");
             }
-            var department = await departmentService.GetDepartment(Id.Value);
+            var department = await departmentService.GetDepartment(deptDecryptedId);
             return View(department);
         }
 
         [HttpPost]
-        [Authorize(Policy = "DeleteRolePolicy")]
-        public async Task<IActionResult> Delete(int Id)
+        //[Authorize(Policy = "DeleteRolePolicy")]
+        public async Task<IActionResult> Delete(string Id, int Ids = 0)
         {
-            await departmentService.DeleteDepartment(Id);
-            return RedirectToAction("Index");
+            int deptDecryptedId = Convert.ToInt32(protector.Unprotect(Id));
+
+            try
+            {
+                await departmentService.DeleteDepartment(deptDecryptedId);
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorMessage = $"The Department cannot be deleted becouse of reference constraint of his/her Id in another database";
+                return View("CustomError");
+            }
         }
     }
 }

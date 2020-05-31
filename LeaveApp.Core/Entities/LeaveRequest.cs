@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace LeaveApp.Core.Entities
@@ -9,6 +10,10 @@ namespace LeaveApp.Core.Entities
     {
         [Key]
         public int Id { get; set; }
+
+        [NotMapped]
+        public string LeveRequestEncryptedId { get; set; }
+
         [Required(ErrorMessage ="Employee Id is Required")] //FOREIGN KEY
         public int EmployeeId { get; set; }
 
@@ -16,7 +21,7 @@ namespace LeaveApp.Core.Entities
         public int LeaveTypeId { get; set; }
 
         [Display(Name = "Request Date")]
-        public DateTime RequestDate { get; set; } = DateTime.Now.ToUniversalTime();
+        public DateTime RequestDate { get; set; } 
 
         [Display(Name = "Approved Date")]
         [Required]
