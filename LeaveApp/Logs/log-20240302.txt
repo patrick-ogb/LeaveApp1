@@ -1,0 +1,11 @@
+2024-03-02 04:43:19.509 +01:00 [ERR] Weather Forcast =>Tesing loggin to file using serilog
+2024-03-02 05:13:41.319 +01:00 [ERR] Weather Forcast =>Attempted to divide by zero.
+2024-03-02 05:16:43.737 +01:00 [ERR] Weather Forcast =>Attempted to divide by zero.
+2024-03-02 05:19:08.277 +01:00 [ERR] Weather Forcast =>Attempted to divide by zero.
+2024-03-02 05:23:34.204 +01:00 [ERR] Weather Forcast =>null
+2024-03-02 05:27:21.377 +01:00 [ERR] Weather Forcast =>   at LeaveApp.Controllers.HomeController.Index() in C:\Users\VilleXtra\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 26
+2024-03-02 05:32:26.814 +01:00 [ERR] Error =>LeaveApp
+2024-03-02 05:36:07.472 +01:00 [ERR] Error =>Attempted to divide by zero.
+2024-03-02 05:38:19.616 +01:00 [ERR] Error => Attempted to divide by zero.
+2024-03-02 06:51:57.238 +01:00 [ERR] Error => Message: Attempted to divide by zero.. Source: LeaveApp. InnerException: 
+2024-03-02 06:54:14.732 +01:00 [ERR] Error => Message: Attempted to divide by zero.. Source: LeaveApp. StackTrace:    at LeaveApp.Controllers.HomeController.Index() in C:\Users\VilleXtra\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 26

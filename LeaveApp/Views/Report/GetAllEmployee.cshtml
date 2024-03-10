@@ -1,0 +1,203 @@
+﻿@model LeaveApp.ReportModel.HoldEmployeeListVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Employee Reports";
+    int ind = 0; int ind1 = 0;
+}
+
+
+<style>
+    #ExcelBtn {
+        background-color: rgb(18, 38, 63) !important;
+        color: white !important;
+    }
+</style>
+<div class="col-lg-12 col-md-12 mt-lg-12">
+    <div class="card">
+        <div class="card-body">
+
+            <div>
+                <div class="card shadow mb-4">
+                    <div class="row">
+                        <div class="card-body col-lg-6 col-sm-12">
+
+
+                            <form method="post">
+                                @Html.AntiForgeryToken()
+                                <div>
+                                    <label asp-for="EmployeeListVMSearchParams.StartDate" class="col-md-3 form-label">Start Date</label>
+                                    <input type="date" asp-for="EmployeeListVMSearchParams.StartDate" placeholder="Start Date" class="form-control col-12" />
+                                </div>
+                                <br />
+                                <div>
+                                    <label asp-for="EmployeeListVMSearchParams.EndDate" class="col-md-3 form-label">End Date</label>
+                                    <input type="date" asp-for="EmployeeListVMSearchParams.EndDate" placeholder="End Date" class="form-control col-12" />
+                                </div>
+                                <br />
+                                <input type="submit" class="btn btn-primary mt-1" value="Submit" />
+                            </form>
+                        </div>
+                        <div class="card-body col-lg-6 col-sm-12 mt-5">
+                            <div class="col-6 mx-auto">
+                                <form asp-action="GetAllEmployee" asp-controller="Report" asp-area="" method="get">
+                                    <input asp-for="EmployeeListVMSearchParams.StartDate" name="startDate" id="startDate" type="hidden" value="@Model.EmployeeListVMSearchParams.StartDate" />
+                                    <input asp-for="EmployeeListVMSearchParams.EndDate" name="endDate" id="endDate" type="hidden" value="@Model.EmployeeListVMSearchParams.EndDate" />
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <input asp-for="SearchText" name="SearchText" placeholder="Enter employee name" class="form-control" />
+                                            <h6 class="text-dark mt-2" style="font-size: 13px;">Search by employee name</h6>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="submit" value="Search" class="btn btn-info float-left mr-3" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    @if (ViewBag.PieChart != null)
+                    {
+                        <div class="col-6">
+                            <img src="data:image/png;base64,@System.Convert.ToBase64String((byte[])ViewBag.PieChartBytes)" alt="Pie Chart" />
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="row ">
+        <div class="card-body col-12">
+            @if (Model != null && Model.HoldEmployeeListVMs.Count() > 0)
+            {
+                var queryString = $"startDate={Model.EmployeeListVMSearchParams.StartDate}&endDate={Model.EmployeeListVMSearchParams.EndDate}";
+
+                <div class="row">
+                    <span class="col-3 mb-3">
+
+                        <a class="btn btn-sm shadow-sm page-link" href="~/Report/ExportEmployeeReporToExcell?@queryString" id="ExcelBtn">
+                            <i class="fa fa-download fa-sm text-white-50"></i>
+                            Export to excel
+                        </a>
+                    </span>
+
+
+                </div>
+
+
+
+
+
+                <table class="table table w-100" id="dataTable" width="100%" cellspacing="0"
+                       style="color:black; font-size: 12px;">
+                    <thead style="text-align: center;">
+                        <tr>
+                            <th>S/N</th>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center; line-height: 45px;">
+                        @foreach (var item in Model.HoldEmployeeListVMs)
+                        {
+                            ind++;
+                            <tr>
+                                <td>
+                                    @ind
+                                </td>
+                                <td>
+                                    @item.EmpId
+                                </td>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @item.StartDate
+                                </td>
+                                <td>
+                                    @item.EndDate
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+                @if (Model.Pager.EndPage > 1)
+                {
+                    var EndPage = Model.Pager.StartPage < 8 ? Model.Pager.EndPage : 7;
+
+                    <div class="row">
+                        <div class="col-5">
+                            <ul class="pagination">
+                                @if (Model.Pager.CurrentPage > 1)
+                                {
+                                    <li>
+                                        <a class="page-link" href="~/Report/GetAllEmployee?@queryString">First</a>
+                                    </li>
+                                    <li>
+                                        <a class="page-link" href="~/Report/GetAllEmployee?pageIndex=@(Model.Pager.CurrentPage - 1)&@queryString">Previous</a>
+                                    </li>
+                                }
+
+                                @for (var pageIndex = Model.Pager.StartPage; pageIndex <= EndPage; pageIndex++)
+                                {
+                                    var myPage = pageIndex;
+                                    <li class="@(pageIndex == Model.Pager.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="~/Report/GetAllEmployee?pageIndex=@myPage&@queryString"> @myPage </a>
+                                    </li>
+                                }
+
+                                @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                                {
+                                    <li>
+                                        <a class="page-link" href="~/Report/GetAllEmployee?pageIndex=@(Model.Pager.CurrentPage + 1)&@queryString">Next</a>
+                                    </li>
+                                    <li>
+                                        <a class="page-link" href="~/Report/GetAllEmployee?pageIndex=@(Model.Pager.TotalPages)&@queryString">Last</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h4 class="text-center mt-5 text-uppercase" style="color:rgb(18, 38, 63);"><b>@ViewBag.MessageX</b></h4>
+            }
+            <style>
+                .pagination li {
+                    margin: 0px 3px;
+                }
+
+                .active {
+                    font-family: 'Lato';
+                }
+
+                    .active a {
+                        background: #2b3452;
+                    }
+
+                .pagination li a {
+                    border-color: #2b3452;
+                    padding: 0.2rem;
+                }
+            </style>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+
+

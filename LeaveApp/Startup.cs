@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
+using Serilog;
 using System;
 
 namespace LeaveApp
@@ -39,6 +40,11 @@ namespace LeaveApp
             services.AddScoped<ILeaveRequestService, LeaveRequestService>();
             services.AddScoped<ILevelService, LevelService>();
             services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
