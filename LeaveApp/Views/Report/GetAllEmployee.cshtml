@@ -22,6 +22,8 @@
                     <div class="row">
                         <div class="card-body col-lg-6 col-sm-12">
 
+                            <h1 class="text-center display-4 text-primary">@ViewBag.Number1</h1>
+                            <h1>@ViewBag.Number</h1>
 
                             <form method="post">
                                 @Html.AntiForgeryToken()
@@ -38,22 +40,20 @@
                                 <input type="submit" class="btn btn-primary mt-1" value="Submit" />
                             </form>
                         </div>
-                        <div class="card-body col-lg-6 col-sm-12 mt-5">
-                            <div class="col-6 mx-auto">
+                        <div class="card-body col-lg-6 col-sm-12 mt-4">
                                 <form asp-action="GetAllEmployee" asp-controller="Report" asp-area="" method="get">
                                     <input asp-for="EmployeeListVMSearchParams.StartDate" name="startDate" id="startDate" type="hidden" value="@Model.EmployeeListVMSearchParams.StartDate" />
                                     <input asp-for="EmployeeListVMSearchParams.EndDate" name="endDate" id="endDate" type="hidden" value="@Model.EmployeeListVMSearchParams.EndDate" />
                                     <div class="row">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-8 ml-3">
                                             <input asp-for="SearchText" name="SearchText" placeholder="Enter employee name" class="form-control" />
                                             <h6 class="text-dark mt-2" style="font-size: 13px;">Search by employee name</h6>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             <input type="submit" value="Search" class="btn btn-info float-left mr-3" />
                                         </div>
                                     </div>
                                 </form>
-                            </div>
                         </div>
                     </div>
                     @if (ViewBag.PieChart != null)

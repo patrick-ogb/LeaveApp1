@@ -9,6 +9,7 @@ using LeaveApp.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using ClosedXML.Excel;
+using System.Globalization;
 
 namespace LeaveApp.Controllers
 {
@@ -16,6 +17,10 @@ namespace LeaveApp.Controllers
     {
         public IActionResult Index()
         {
+
+           
+                
+
             return View();
         }
 
@@ -27,15 +32,30 @@ namespace LeaveApp.Controllers
             //    return RedirectToAction("Login", "User", new { area = "Account" });
             //}
 
-            //HolAllReconciliationVM model = new HolAllReconciliationVM();
+            int number1 = 33330;
+            ViewBag.Number1 = number1.ToString("N0"); // "N0" format specifier adds commas for thousands separator
+           
+
+           double number = 3330;
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+            ViewBag.Number = number.ToString("N", culture);
+
             HoldEmployeeListVM model = new HoldEmployeeListVM();
-
-
+            EmployeeListVMSearchParams searchItems = new EmployeeListVMSearchParams();
+            List< EmployeeListVM > list = new List< EmployeeListVM >();
             Pager pager = new Pager();
+
+            //if (startDate == Convert.ToDateTime("01/01/0001 00:00:00") && endDate == Convert.ToDateTime("01/01/0001 00:00:00"))
+            //{
+            //    model.EmployeeListVMSearchParams = searchItems;
+            //    model.Pager = pager;
+            //    model.HoldEmployeeListVMs = list;
+            //    return View(model);
+            //}
 
             EmployeeList emp  = new EmployeeList();
             var empList =  emp.GetEmployeeList(startDate, endDate);
-            List< EmployeeListVM > list = new List< EmployeeListVM >();
+
             foreach (var item in empList)
             {
                 list.Add(new EmployeeListVM
@@ -48,6 +68,8 @@ namespace LeaveApp.Controllers
             }
 
             model.HoldEmployeeListVMs = list;
+
+            
 
             pager = new Pager(model.HoldEmployeeListVMs.Count(), pageIndex, 5);
 
@@ -65,7 +87,7 @@ namespace LeaveApp.Controllers
 
             model.totalCount = empList.Count();
 
-            var searchItems = new EmployeeListVMSearchParams()
+             searchItems = new EmployeeListVMSearchParams()
             {
                 StartDate = startDate,
                 EndDate = endDate,
@@ -80,9 +102,6 @@ namespace LeaveApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAllEmployee(HoldEmployeeListVM model, int? pageIndex)
         {
-
-            //var Reconcilist = await GetReconciliationLists(model.ReconciliationSearchParams.StartDate, model.ReconciliationSearchParams.EndDate, model.ReconciliationSearchParams.StateId);
-
 
             EmployeeList emp = new EmployeeList();
             var empList = emp.GetEmployeeList(model.EmployeeListVMSearchParams.StartDate, model.EmployeeListVMSearchParams.EndDate);
