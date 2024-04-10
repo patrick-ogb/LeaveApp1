@@ -138,6 +138,20 @@ namespace LeaveApp.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public IActionResult EmployeeCreate(HoldEmployeeListVM model)
+        {
+            if (model.EmployeeCreateVM.SelectedList != null)
+            {
+                var id = 0;
+                var results = model.EmployeeCreateVM.SelectedList.Split(',');
+                foreach (var item in results)
+                {
+                    id = Convert.ToInt32(item.Split('_')[1]);
+                }
+            }
+            return View();
+        }
 
 
         public async Task<IActionResult> ExportEmployeeReporToExcell(DateTime startDate, DateTime endDate)

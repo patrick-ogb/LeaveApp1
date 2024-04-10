@@ -13,6 +13,7 @@ namespace LeaveApp.ReportModel
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public bool Status { get; set; }
 
     }
     public class EmployeeListVMList
@@ -32,7 +33,12 @@ namespace LeaveApp.ReportModel
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
     }
-    
+
+    public class EmployeeCreate
+    {
+        public string SelectedList { get; set; }
+    }
+
     public class HoldEmployeeListVM
     {
         public List<EmployeeListVM> HoldEmployeeListVMs { get; set; }
@@ -40,6 +46,7 @@ namespace LeaveApp.ReportModel
         public Pager Pager { get; set; }
         public int totalCount { get; set; }
         public string SearchText { get; set; }
+        public EmployeeCreate EmployeeCreateVM { get; set; }
 
     }
 }

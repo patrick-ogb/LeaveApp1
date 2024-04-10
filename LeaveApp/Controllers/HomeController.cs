@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using LeaveApp.ReportModel;
+using System.Linq;
 
 namespace LeaveApp.Controllers
 {
@@ -51,9 +53,12 @@ namespace LeaveApp.Controllers
             return View();
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
 
         
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
+
 
 
     }
