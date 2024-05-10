@@ -91,6 +91,25 @@
 
 
 
+                <div class="modal" tabindex="-1" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="myModalBody">
+                                <p>Modal body text goes here.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <a type="button" class="btn btn-primary" asp-action="Index" asp-asp-controller="Report">Save changes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
                 <table class="table table w-100" id="dataTable" width="100%" cellspacing="0"
@@ -103,6 +122,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Status</th>
+                            <th>View Detail</th>
                         </tr>
                     </thead>
                     <tbody style="text-align: center; line-height: 45px;">
@@ -128,6 +148,9 @@
                                 <td>
                                     <input type="checkbox" class="checkbox" id="checkbox_@item.EmpId" value="@item.EmpId">@item.Name<br>
                                 </td>
+                                <td>
+                                    <button><a href="#" type="button" onclick="showEmployee(@item.EmpId)" />View</button>
+                                </td>
                             </tr>
                         }
                         
@@ -137,10 +160,24 @@
 
 
                 <form asp-action="EmployeeCreate" asp-controller="Report">
-                    <input asp-for="@Model.EmployeeCreateVM.SelectedList" type="text" hidden id="selectedList" />
+                    <input asp-for="@Model.EmployeeEditMultipleVM.SelectedList" type="text" hidden id="selectedList" />
                     <br />
-                    <input type="submit" class="btn btn-primary mt-1" value="Submit" />
+                    <input type="submit" class="btn btn-primary mt-1" value="Proceed" />
                 </form>
+
+
+                @* Post Form data to backend by Id (#myForm) using JQuery*@
+                <form method="post" id="myForm">
+                   @Html.TextBoxFor(model => model.EmployeeCreateVM.FirstName, new {@class = "form-control"})
+                   <br />
+                   @Html.TextBoxFor(model => model.EmployeeCreateVM.LastName, new {@class = "form-control"})
+                   <br/>
+                   @Html.TextBoxFor(model => model.EmployeeCreateVM.Age, new {@class = "form-control"})
+
+                    <input id="btnSubmit" type="button" class="btn btn-success m-1" value="Submit" />
+                </form>
+
+
 
                 @if (Model.Pager.EndPage > 1)
                 {
@@ -211,6 +248,24 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+
+
+    var showEmployee = function (employeeId) {
+        //debugger;
+        $.ajax({
+            type: "POST",
+            url: "ViewEmployeeDetails",
+            data: { EmployeeId: employeeId },
+            success: function (response) {
+                //debugger
+                $("#myModalBody").html(response);
+                $("#myModal").modal("show");
+            }
+        })
+    }
+
+
+
     $(document).ready(function () {
         var selectedItems = []; // Initialize an empty array to store selected values
 
@@ -237,10 +292,29 @@
         function updateSelectedList() {
             $('#selectedList').empty(); // Clear the list before adding new items
             $.each(selectedItems, function (index, value) {
-                //$('#selectedList').append('<li>' + value + '</li>'); // Add each selected ID as a list item
+                $('#selectedList').append('<li>' + value + '</li>'); // Add each selected ID as a list item
               
             });
         }
+
+
+        //JQuery function to post form data to backend
+        $("#btnSubmit").click(function () {
+            var model = $("#myForm").serialize();
+            //debugger;
+            $.ajax({
+                type: "POST",
+                url: "PostEmployee",
+                data: model,
+                success: function (response) {
+                    //debugger;
+                    alert("Your are here");
+                }
+               
+            })
+        })
+
+
     });
 
 </script>

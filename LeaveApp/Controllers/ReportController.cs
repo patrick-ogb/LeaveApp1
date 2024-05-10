@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.IO;
 using ClosedXML.Excel;
 using System.Globalization;
+using System.Text.Json;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace LeaveApp.Controllers
 {
@@ -17,9 +20,6 @@ namespace LeaveApp.Controllers
     {
         public IActionResult Index()
         {
-
-           
-                
 
             return View();
         }
@@ -45,13 +45,13 @@ namespace LeaveApp.Controllers
             List< EmployeeListVM > list = new List< EmployeeListVM >();
             Pager pager = new Pager();
 
-            //if (startDate == Convert.ToDateTime("01/01/0001 00:00:00") && endDate == Convert.ToDateTime("01/01/0001 00:00:00"))
-            //{
-            //    model.EmployeeListVMSearchParams = searchItems;
-            //    model.Pager = pager;
-            //    model.HoldEmployeeListVMs = list;
-            //    return View(model);
-            //}
+            if (startDate == Convert.ToDateTime("01/01/0001 00:00:00") && endDate == Convert.ToDateTime("01/01/0001 00:00:00"))
+            {
+                model.EmployeeListVMSearchParams = searchItems;
+                model.Pager = pager;
+                model.HoldEmployeeListVMs = list;
+                return View(model);
+            }
 
             EmployeeList emp  = new EmployeeList();
             var empList =  emp.GetEmployeeList(startDate, endDate);
@@ -141,10 +141,10 @@ namespace LeaveApp.Controllers
         [HttpPost]
         public IActionResult EmployeeCreate(HoldEmployeeListVM model)
         {
-            if (model.EmployeeCreateVM.SelectedList != null)
+            if (model.EmployeeEditMultipleVM.SelectedList != null)
             {
                 var id = 0;
-                var results = model.EmployeeCreateVM.SelectedList.Split(',');
+                var results = model.EmployeeEditMultipleVM.SelectedList.Split(',');
                 foreach (var item in results)
                 {
                     id = Convert.ToInt32(item.Split('_')[1]);
@@ -153,6 +153,19 @@ namespace LeaveApp.Controllers
             return View();
         }
 
+        public JsonResult PostEmployee(HoldEmployeeListVM model)
+        {
+            var formData = model;
+            var serializer = JsonSerializer.Serialize(formData);
+            return Json(model);
+        }
+
+        public IActionResult ViewEmployeeDetails(int EmployeeId)
+        {
+            EmployeeList emp = new EmployeeList();
+            var empList = emp.GetEmployeeList(DateTime.Now, DateTime.Now).FirstOrDefault(x => x.EmpId == EmployeeId);
+            return PartialView("_EmployeeDetail", empList);
+        }
 
         public async Task<IActionResult> ExportEmployeeReporToExcell(DateTime startDate, DateTime endDate)
         {

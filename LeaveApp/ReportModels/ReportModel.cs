@@ -36,6 +36,13 @@ namespace LeaveApp.ReportModel
 
     public class EmployeeCreate
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Age { get; set; }
+    }
+
+    public class EmployeeEditMultiple
+    {
         public string SelectedList { get; set; }
     }
 
@@ -47,6 +54,7 @@ namespace LeaveApp.ReportModel
         public int totalCount { get; set; }
         public string SearchText { get; set; }
         public EmployeeCreate EmployeeCreateVM { get; set; }
+        public EmployeeEditMultiple EmployeeEditMultipleVM { get; set; }
 
     }
 }

@@ -5,4 +5,86 @@
 <div class="text-center">
     <h1 class="display-4 text-primary">Welcome To</h1>
     <p>Employees Leave Management System</p>
+
+     <!-- Modal button -->
+    <div class="col-sm-3 ">
+        <button class="btn btn-secondary float-end" onclick="funCheckInOutPartial('2', 'http/image.jpeg')">
+            Book now
+        </button>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" data-mdb-backdrop="static" id="modal2" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 600px;">
+                <div class="modal-header">
+
+                    <img src="#" alt="Image" height="200" width="500" id="bookedImageId" style="margin-left:30px" />
+
+                </div>
+
+                <div class="modal-body" style="height: 250px;" id="modelbody2">
+                        <div class="modal-footer">
+                            <div class="mt-5 float-end">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Close</a>
+                            </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $('#tableId').DataTable({
+        });
+
+        function funCheckInOutPartial(reservationId, imageUrl) {
+            var sessionValue = reservationId + "!!!" + imageUrl;
+            console.log(sessionValue);
+            debugger;
+            $.ajax({
+                url: "Home/CheckInOut",
+                data: { SessionValue: sessionValue },
+                success: function (response) { // corrected 'success' spelling
+                    debugger;
+                    console.log("Yeah");
+                    $("#modelbody2").html("Up and running");
+                    $("#modal2").modal("show");
+                    debugger;
+                },
+                error: function (response) { // corrected 'error' spelling
+                    debugger;
+                    console.log("Error Log " + response); // corrected 'Response' to 'response'
+                }
+            });
+        }
+
+
+        // function funCheckInOutPartial(reservationId, imageUrl) {
+        //     var sessionValue = reservationId + "!!!" + imageUrl;
+        //     console.log(sessionValue);
+        //     debugger;
+        //     $.ajax({
+        //         url: "Home/CheckInOut",
+        //         data: { SessionValue: sessionValue },
+        //         successs: function (response) {
+        //             debugger
+        //             console.log("Yeah");
+        //             $("#modelbody2").html("Up and running");
+        //             $("#modal2").modal("show");
+        //             debugger;
+        //         },
+        //         Error: function (Response) {
+        //             debugger;
+        //             console.log("Error Log " + Response)
+        //         }
+        //     })
+        // }
+
+    </script>
+}

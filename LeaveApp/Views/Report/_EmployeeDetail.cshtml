@@ -1,0 +1,40 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers@using LeaveApp.ReportModel;
+@model LeaveApp.Utilities.EmployeeList;
+<table class="table table w-100" id="dataTable" width="100%" cellspacing="0"
+       style="color:black; font-size: 12px;">
+
+       <h1>Up and running</h1>
+    @if (Model != null)
+    {
+        <thead style="text-align: center;">
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center; line-height: 45px;">
+
+            <tr>
+                <td>
+                    @Model.Name
+                </td>
+                <td>
+                    @Model.Name
+                </td>
+                <td>
+                    @Model.StartDate
+                </td>
+                <td>
+                    @Model.EndDate
+                </td>
+            </tr>
+
+        </tbody>
+
+    }
+   
+
+</table>
