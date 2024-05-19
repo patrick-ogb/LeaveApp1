@@ -4,6 +4,8 @@ using LeaveApp.Service;
 using LeaveApp.Service.Abstract;
 using LeaveApp.Service.Concrete;
 using LeaveApp.Service.Context;
+using LeaveApp.Services;
+using LeaveApp.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +42,7 @@ namespace LeaveApp
             services.AddScoped<ILeaveRequestService, LeaveRequestService>();
             services.AddScoped<ILevelService, LevelService>();
             services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+            services.AddScoped<IProcessorService, ProcessorService>();
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.Console()

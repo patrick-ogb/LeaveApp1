@@ -1,0 +1,106 @@
+﻿@using LeaveApp.ReportModel
+@model HoldLevelVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h6 class="text-center display-4 text-primary">Level</h6>
+
+@if(Model.HoldLevelVMs != null && Model.HoldLevelVMs.Count() > 0)
+{
+
+    var queryString = $"determinant= 0_0_1_0_0";
+
+    <table id="tableId" class="table table-striped border">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                   Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                   DateCreated
+                </th>
+                <th>
+                    <a asp-action="Create" class="ml-5 btn btn-outline-primary">Add New Level</a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.HoldLevelVMs)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.LevelEncryptedId }, new { @class = "btn btn-outline-primary ml-2 m-1 " })
+                        @Html.ActionLink("Details", "Details", new { id = item.LevelEncryptedId }, new { @class = "btn btn-outline-success m-1 " })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.LevelEncryptedId }, new { @class = "btn btn-outline-danger m-1 " })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.Pager.EndPage > 1)
+    {
+        var EndPage = Model.Pager.StartPage < 8 ? Model.Pager.EndPage : 7;
+
+        <div class="row">
+            <div class="col-5">
+                <ul class="pagination">
+                    @if (Model.Pager.CurrentPage > 1)
+                    {
+                        <li>
+                            <a class="page-link" href="~/Administration/Index?@queryString">First</a>
+                        </li>
+                        <li>
+                            <a class="page-link" href="~/Administration/Index?pageIndex=@(Model.Pager.CurrentPage - 1)&@queryString">Previous</a>
+                        </li>
+                    }
+
+                    @for (var pageIndex = Model.Pager.StartPage; pageIndex <= EndPage; pageIndex++)
+                    {
+                        var myPage = pageIndex;
+                        <li class="@(pageIndex == Model.Pager.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="~/Administration/Index?pageIndex=@myPage&@queryString"> @myPage </a>
+                        </li>
+                    }
+
+                    @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                    {
+                        <li>
+                            <a class="page-link" href="~/Administration/Index?pageIndex=@(Model.Pager.CurrentPage + 1)&@queryString">Next</a>
+                        </li>
+                        <li>
+                            <a class="page-link" href="~/Administration/Index?pageIndex=@(Model.Pager.TotalPages)&@queryString">Last</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $('#tableId').DataTable();
+    </script>
+}

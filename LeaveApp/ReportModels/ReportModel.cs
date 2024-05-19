@@ -4,6 +4,11 @@ using System;
 using LeaveApp.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using LeaveApp.ViewModel.EmployeeViewModel;
+using DocumentFormat.OpenXml.Bibliography;
+using LeaveApp.Core.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
+using LeaveApp.ViewModel;
 
 namespace LeaveApp.ReportModel
 {
@@ -57,4 +62,69 @@ namespace LeaveApp.ReportModel
         public EmployeeEditMultiple EmployeeEditMultipleVM { get; set; }
 
     }
+
+
+
+    public class LevelVM
+    {
+        public int Id { get; set; }
+        public string LevelEncryptedId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public DateTime DateCreated { get; set; }
+
+    }
+
+
+    public class HoldLevelVM
+    {
+        public List<LevelVM> HoldLevelVMs { get; set; }
+        public Pager Pager { get; set; }
+        public int totalCount { get; set; }
+        public string SearchText { get; set; }
+
+    }
+
+    public class DepartmentVM
+    {
+        public int Id { get; set; }
+
+        public string DepartmentEncryptedId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+        public DateTime DateCreated { get; set; }
+    }
+
+    public class HoldDepartmentVM
+    {
+        public List<DepartmentVM> HoldDepartmentVMs { get; set; }
+        public Pager Pager { get; set; }
+        public int totalCount { get; set; }
+        public string SearchText { get; set; }
+
+    }
+    public class HoldEmployeeVM
+    {
+        public EmployeeListViewModel EmployeeListVMs { get; set; }
+        public Pager Pager { get; set; }
+        public int totalCount { get; set; }
+        public string SearchText { get; set; }
+
+    }
+
+    public class HoldApplicationVM
+    {
+        public HoldLevelVM holdLevelVM { get; set; }
+        public HoldDepartmentVM holdDepartmentVM { get; set; }
+        public TabVM TabVM { get; set; }
+        public HoldApplicationVM()
+        {
+            TabVM = new TabVM();   
+        }
+
+    }
+
 }

@@ -1,0 +1,109 @@
+﻿@model EmployeeListViewModel
+
+@{
+    ViewData["Title"] = "Employee List";
+}
+<h1 class="text-center display-4 text-primary">Employees</h1>
+<hr style="margin-top: -10px;  margin-bottom: 0px;" />
+@{
+    var result = from emp in Model.Employees
+                 join dept in Model.Departments
+                 on emp.DepartmentId equals dept.Id
+                 join level in Model.Levels
+                 on emp.LevelId equals level.Id
+
+                 select new
+                 {
+                     Id = emp.Id,
+                     FirstName = emp.FirstName,
+                     LastName = emp.LastName,
+                     Email = emp.Email,
+                     Phone = emp.Phone,
+                     DateCreated = emp.DateCreated,
+                     DateModified = emp.DateModified,
+                     Department = dept.Name,
+                     Level = level.Name,
+                     EmployeeEncryptedId = emp.EmployeeEncryptedId
+                 };
+}
+<form method="get" asp-action="Index">
+    @*<div class="col-12">*@
+    <table id="tableId" class="table table-striped border">
+        <thead>
+            <tr class="table-secondary">
+                <th>
+                    FirstName
+                </th>
+                <th>
+                    LastName
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Level
+                </th>
+                <th>
+                    DateCreated
+                </th>
+                <th>
+                    DateModified
+                </th>
+                <th>
+                    <a asp-action="Create" asp-controller="Employee" class="ml-5 btn btn-outline-info">ADD NEW EMPLOYEE</a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in result)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => emp.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => emp.LastName)
+                    </td>
+                    <td>
+                        <a href="@emp.Email"> @Html.DisplayFor(model => emp.Email)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => emp.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => emp.Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => emp.Level)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => emp.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => emp.DateModified)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeEncryptedId }, new { @class = "btn btn-outline-primary ml-1 m-1 " })
+                        @Html.ActionLink("Details", "Details", new { id = emp.EmployeeEncryptedId }, new { @class = "btn btn-outline-success ml-1 m-1" })
+                        @Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeEncryptedId }, new { @class = "btn btn-outline-danger ml-1 m-1" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*</div>*@
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        $('#tableId').DataTable({
+        });
+    </script>
+}
+

@@ -12,6 +12,9 @@ using LeaveApp.Service.Context;
 using LeaveApp.ViewModel.AdministrationViewModel;
 using LeaveApp.ViewModel.ClaimsViewModel;
 using LeaveApp.Core;
+using LeaveApp.ViewModel;
+using LeaveApp.Services.IServices;
+using LeaveApp.ReportModel;
 
 namespace LeaveApp.Controllers
 {
@@ -21,15 +24,74 @@ namespace LeaveApp.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<AdministrationController> logger;
+        private readonly IProcessorService _processorService;
 
         public AdministrationController(RoleManager<IdentityRole> roleManager,
                                         UserManager<ApplicationUser> userManager,
-                                        ILogger<AdministrationController> logger)
+                                        ILogger<AdministrationController> logger,
+                                        IProcessorService processorService)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
             this.logger = logger;
+            _processorService = processorService;
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Index(int? pageIndex, string searchText, string? determinant)
+        {
+            HoldApplicationVM holdApplicationVM = new HoldApplicationVM();
+            if (determinant == null)
+            {
+                holdApplicationVM.holdDepartmentVM = await _processorService.ProcessDepartment(pageIndex, searchText);
+                holdApplicationVM.holdLevelVM = await _processorService.Processlevel(pageIndex, searchText);
+            }
+            else if (determinant != null && determinant.Split('_')[0].Trim() == "1")
+            {
+            }
+            else if (determinant != null && determinant.Split('_')[1].Trim() == "1")
+            {
+                holdApplicationVM.holdDepartmentVM = await _processorService.ProcessDepartment(pageIndex, searchText);
+                pageIndex = null; searchText = null;
+                holdApplicationVM.holdLevelVM = await _processorService.Processlevel(pageIndex, searchText);
+            }
+            else if (determinant != null && determinant.Split('_')[2].Trim() == "1")
+            {
+                holdApplicationVM.holdLevelVM = await _processorService.Processlevel(pageIndex, searchText);
+                pageIndex = null; searchText = null;
+                holdApplicationVM.holdDepartmentVM = await _processorService.ProcessDepartment(pageIndex, searchText);
+            }
+                    return View(holdApplicationVM);
+        }
+
+
+
+        //public IActionResult SwitchToTabs(string tabname)
+        //{
+        //    var vm = new TabVM();
+        //    switch (tabname)
+        //    {
+        //        case "Employee":
+        //            vm.ActiveTab = Tab.Employee;
+        //            break;
+        //        case "Department":
+        //            vm.ActiveTab = Tab.Department;
+        //            break;
+        //        case "Level":
+        //            vm.ActiveTab = Tab.Level;
+        //            break;
+        //        default:
+        //            vm.ActiveTab = Tab.Employee;
+        //            break;
+        //    }
+        //    return RedirectToAction(nameof(AdministrationController.Index), vm);
+        //}
+
+
+
+
+
 
         [HttpGet]
         [AllowAnonymous]
