@@ -9,6 +9,10 @@ using LeaveApp.ViewModel.EmployeeViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using System.IO;
 
 namespace LeaveApp.Controllers
 {
@@ -33,7 +37,8 @@ namespace LeaveApp.Controllers
 
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(EmployeeListViewModel? param)
         {
             try
             {
@@ -45,13 +50,18 @@ namespace LeaveApp.Controllers
 
                 var Departments = await departmentService.GetDepartments();
                 var Levels = await levelService.GetLevels();
-
+                
                 EmployeeListViewModel model = new EmployeeListViewModel
                 {
                     Employees = Employees,
                     Departments = Departments,
-                    Levels = Levels
+                    Levels = Levels,
+                    
                 };
+                foreach (var item in Employees)
+                {
+                    model.empInfo = new EmpInfo { EmpInfoID = item.Id.ToString(), EmpInfoName = item.FirstName + " " + item.LastName };
+                }
 
                 return View(model);
             }
@@ -61,6 +71,75 @@ namespace LeaveApp.Controllers
                 ViewBag.ErrorMessage = ex.Message;
                 return View("CustomError");
             }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(EmployeeListViewModel? param, int? msg = 0)
+        {
+            if (param != null)
+                return RedirectToAction(nameof(Index), new TestNullableClass { ClassId = param.empInfo.EmpInfoID, ClassName = param.empInfo.EmpInfoName });
+            return View(param);
+        }
+
+        public async Task<IActionResult> Print(int id)
+        {
+
+            return View();
+        }
+
+
+        [HttpGet("GeneratePdf")]
+        public IActionResult GeneratePdf()
+        {
+            try
+            {
+                // Create a memory stream to hold the PDF data
+                using (var memoryStream = new MemoryStream())
+                {
+                    // Initialize the PDF writer and document
+                    PdfWriter writer = new PdfWriter(memoryStream);
+                    PdfDocument pdf = new PdfDocument(writer);
+                    Document document = new Document(pdf);
+
+                    // Add a paragraph to the PDF
+                    document.Add(new Paragraph("Hello, this is a PDF generated in ASP.NET Core!"));
+
+                    // Add another paragraph with more styling
+                    document.Add(new Paragraph("This is another paragraph with bold text.")
+                        .SetBold());
+
+                    // Close the document
+                    document.Close();
+
+                    // Convert the MemoryStream to a byte array and return as a file
+                    var bytes = memoryStream.ToArray();
+                    //return File(bytes, "application/pdf", "GeneratedPdf.pdf");
+                    var result = File(bytes, "application/pdf", "GeneratedPdf.pdf");
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+        }
+
+
+
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Edit(EmployeeListViewModel? param, int? msg = 0)
+        {
+            if (param != null)
+                return RedirectToAction(nameof(Edit), new TestNullableClass { ClassId = param.empInfo.EmpInfoID, ClassName = param.empInfo.EmpInfoName });
+            return View(param);
         }
 
         [HttpGet]
@@ -130,22 +209,41 @@ namespace LeaveApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string Id)
+        public async Task<IActionResult> Edit(string Id = null, EmployeeCreateViewModel param = null)
         {
             int decryptedId;
+            
             int y;
-            if (int.TryParse(Id, out y))
-            {
-                decryptedId = y;
-            }
-            else
-            {
-                decryptedId = Convert.ToInt32(protector.Unprotect(Id));
-            }
+            
 
             var departments = await departmentService.GetDepartments();
             var level = await levelService.GetLevels();
-            Employee employee = await employeeService.GetEmployee(decryptedId);
+            Employee employee = new Employee();
+            if (Id == null)
+            {
+                //employee = (await employeeService.GetEmployees()).FirstOrDefault();
+
+                //if (int.TryParse(param.empInfo., out y))
+                //{
+                //    decryptedId = y;
+                //}
+                //else
+                //{
+                //    decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+                //}
+            }
+            else
+            {
+                if (int.TryParse(Id, out y))
+                {
+                    decryptedId = y;
+                }
+                else
+                {
+                    decryptedId = Convert.ToInt32(protector.Unprotect(Id));
+                }
+                employee = await employeeService.GetEmployee(decryptedId);
+            }
             EmployeeEditViewModel employeeEditViewModel = new EmployeeEditViewModel()
             {
                 Id = Id,
@@ -163,14 +261,17 @@ namespace LeaveApp.Controllers
                 LevelList = level
             };
             
-            if (decryptedId < 1)
-            {
-                return RedirectToAction("Index");
-            }
+            //if (decryptedId < 1)
+            //{
+            //    return RedirectToAction("Index");
+            //}
             return View(employeeEditViewModel);
         }
+
+        
+
         [HttpPost]
-        public async Task<IActionResult> Edit(EmployeeEditViewModel model)
+        public async Task<IActionResult> Edit2(EmployeeEditViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -242,5 +343,11 @@ namespace LeaveApp.Controllers
                 return View("CustomError");
             }
         }
+    }
+
+    public class TestNullableClass
+    {
+        public string? ClassId { get; set; }
+        public string? ClassName { get; set; }
     }
 }

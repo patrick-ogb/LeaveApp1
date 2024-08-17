@@ -26,7 +26,7 @@
                      EmployeeEncryptedId = emp.EmployeeEncryptedId
                  };
 }
-<form method="get" asp-action="Index">
+@* <form method="get" asp-action="Index"> *@
     @*<div class="col-12">*@
     <table id="tableId" class="table table-striped border">
         <thead>
@@ -49,61 +49,70 @@
                 <th>
                     Level
                 </th>
+            <th>
+                <a asp-action="Create" class="ml-5 btn btn-outline-info">ADD NEW EMPLOYEE</a>
+            </th>
                 <th>
-                    DateCreated
-                </th>
-                <th>
-                    DateModified
-                </th>
-                <th>
-                    <a asp-action="Create" class="ml-5 btn btn-outline-info">ADD NEW EMPLOYEE</a>
+                <a asp-action="GeneratePdf" class="ml-5 btn btn-outline-info">GENERATE PDF</a>
                 </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var emp in result)
             {
-                <tr>
-                    <td>
+                    <tr>
+                        <td>
                         @Html.DisplayFor(model => emp.FirstName)
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                         @Html.DisplayFor(model => emp.LastName)
-                    </td>
-                    <td>
-                        <a href="@emp.Email"> @Html.DisplayFor(model => emp.Email)</a>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
+                            <a href="@emp.Email"> @Html.DisplayFor(model => emp.Email)</a>
+                        </td>
+                        <td>
                         @Html.DisplayFor(model => emp.Phone)
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                         @Html.DisplayFor(model => emp.Department)
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                         @Html.DisplayFor(model => emp.Level)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => emp.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => emp.DateModified)
-                    </td>
-                    <td>
+                        
                         @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeEncryptedId }, new { @class = "btn btn-outline-primary ml-1 m-1 " })
+                        @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeEncryptedId, param = 333 }, new { @class = "btn btn-outline-primary ml-1 m-1 " })
                         @Html.ActionLink("Details", "Details", new { id = emp.EmployeeEncryptedId }, new { @class = "btn btn-outline-success ml-1 m-1" })
                         @Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeEncryptedId }, new { @class = "btn btn-outline-danger ml-1 m-1" })
-                    </td>
-                </tr>
+                        @Html.ActionLink("Print", "Print", new { id = 1 }, new { @class = "btn btn-outline-danger ml-1 m-1" })
+                        </td>
+                        <td colspan="3">
+                                <div class="row">
+                    <form asp-action="Edit" asp-controller="Employee" method="post">
+                                <input type="hidden" asp-for="empInfo.EmpInfoID" value="@emp.EmployeeEncryptedId"/>
+                                <div class="row">
+                                    <input type="text" asp-for="empInfo.EmpInfoName" class="form-control" />
+                                    <span asp-validation-for="empInfo.EmpInfoName" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </form>
+                </div>
+                        </td>
+
+                    </tr>
             }
+
+            
         </tbody>
     </table>
     @*</div>*@
-</form>
+@* </form> *@
 
-@section Scripts{
-    <script type="text/javascript">
-        $('#tableId').DataTable({
-        });
-    </script>
+@section Scripts {
+        <script type="text/javascript">
+            $('#tableId').DataTable({
+            });
+        </script>
 }
 

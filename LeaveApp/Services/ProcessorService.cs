@@ -1,5 +1,6 @@
 ﻿using LeaveApp.Core.Entities;
 using LeaveApp.Extensions;
+using LeaveApp.Global;
 using LeaveApp.ReportModel;
 using LeaveApp.Security;
 using LeaveApp.Service.Abstract;
@@ -9,13 +10,21 @@ using LeaveApp.Utilities;
 using LeaveApp.ViewModel.EmployeeViewModel;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using QRCoder;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
+using Newtonsoft.Json;
+using LeaveApp.ResponseViM;
 
 namespace LeaveApp.Services
 {
-    public class ProcessorService: IProcessorService
+    public class ProcessorService : IProcessorService
     {
         private readonly ILevelService _levelService;
         private readonly IEmployeeService _employeeService;
@@ -121,52 +130,123 @@ namespace LeaveApp.Services
             return model;
         }
 
-        //public async Task<HoldEmployeeVM> ProcessEmployee(int? pageIndex, string? SearchText)
-        //{
-        //    HoldEmployeeVM model = new HoldEmployeeVM();
-        //    List<EmployeeListVM> list = new List<EmployeeListVM>();
-        //    Pager pager = new Pager();
+        public string GenerateQRCode(QRCodeVM model)
+        {
+            try
+            {
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                StringBuilder stringToCheck = new StringBuilder();
+                stringToCheck.Append(model.Key1 + model.Value1);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(model.Key2 + model.Value2);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(model.Key3 + model.Value3);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(model.Key4 + model.Value4);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(model.Key5 + model.Value5);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(model.Key6 + model.Value6);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(model.Key7 + model.Value7);
+                stringToCheck.AppendLine();
+                stringToCheck.Append(Convert.ToString("For more information click : ") + "https://localhost:7038/ApplicationVerification");
 
-        //    //EmployeeList emp = new EmployeeList();
-        //    var employees = await _employeeService.GetEmployees();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(stringToCheck.ToString(), QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-        //    IEnumerable<Employee> Employees = (await _employeeService.GetEmployees()).Select(emp =>
-        //    {
-        //        emp.EmployeeEncryptedId = protector.Protect(emp.Id.ToString());
-        //        return emp;
-        //    });
-
-        //    var Departments = await _departmentService.GetDepartments();
-        //    var Levels = await _levelService.GetLevels();
-
-
-
-        //    model.EmployeeListVMs = Employees;
-
-        //    pager = new Pager(model.EmployeeListVMs.Employees.Count(), pageIndex, 5);
-
-        //    model.Pager = pager;
-        //    if (!string.IsNullOrEmpty(SearchText))
-        //    {
-        //        SearchText = SearchText.Trim();
-        //        model.HoldLevelVMs = model.HoldLevelVMs.Where(c => c.Name.Contains(SearchText)).ToList();
-        //    }
-        //    else
-        //    {
-        //        model.HoldLevelVMs = model.HoldLevelVMs.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList();
-        //    }
-
-        //    //EmployeeListViewModel empList = new EmployeeListViewModel
-        //    //{
-        //    //    Employees = Employees,
-        //    //    Departments = Departments,
-        //    //    Levels = Levels
-        //    //};
-
-        //    model.totalCount = list.Count();
+                string ImageUrl = "";
+                using (Bitmap bitMap = qrCode.GetGraphic(20))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        byte[] byteImage = ms.ToArray();
+                        ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+                    }
+                }
+                return ImageUrl;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
-        //    return model;
-        //}
+
+    public static ResponseObject EgolePay_CheckWallet()
+    {
+        try
+        {
+            string baseurl = "https://services.egolepay.com";
+                string url = "/api/Account/AuthService";
+                string key = "PlI34D1jFKHIwLYov9C9Fr2baO8LuoudAInoORo5pmlX0nSnc50k93V9ASDqMr+gTBHKnp9ve+z2ktZueGYHpnCCR+SzD1OxbIX8zsFiX/ZLl+cu49tGNVNogwO8/yCw";
+            var client = new RestClient(baseurl);
+            var request = new RestRequest(url, Method.Post);
+
+            request.AddJsonBody(new { apikey = key });
+
+            RestResponse response = client.Execute(request);
+            var responseDada = response.Content;
+                var data = JsonConvert.DeserializeObject<ResponseObject>(responseDada);
+
+                return data;
+        }
+        catch (Exception ex)
+        {
+            return new ResponseObject();
+        }
     }
+
+
+    //public async Task<HoldEmployeeVM> ProcessEmployee(int? pageIndex, string? SearchText)
+    //{
+    //    HoldEmployeeVM model = new HoldEmployeeVM();
+    //    List<EmployeeListVM> list = new List<EmployeeListVM>();
+    //    Pager pager = new Pager();
+
+    //    //EmployeeList emp = new EmployeeList();
+    //    var employees = await _employeeService.GetEmployees();
+
+    //    IEnumerable<Employee> Employees = (await _employeeService.GetEmployees()).Select(emp =>
+    //    {
+    //        emp.EmployeeEncryptedId = protector.Protect(emp.Id.ToString());
+    //        return emp;
+    //    });
+
+    //    var Departments = await _departmentService.GetDepartments();
+    //    var Levels = await _levelService.GetLevels();
+
+
+
+    //    model.EmployeeListVMs = Employees;
+
+    //    pager = new Pager(model.EmployeeListVMs.Employees.Count(), pageIndex, 5);
+
+    //    model.Pager = pager;
+    //    if (!string.IsNullOrEmpty(SearchText))
+    //    {
+    //        SearchText = SearchText.Trim();
+    //        model.HoldLevelVMs = model.HoldLevelVMs.Where(c => c.Name.Contains(SearchText)).ToList();
+    //    }
+    //    else
+    //    {
+    //        model.HoldLevelVMs = model.HoldLevelVMs.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList();
+    //    }
+
+    //    //EmployeeListViewModel empList = new EmployeeListViewModel
+    //    //{
+    //    //    Employees = Employees,
+    //    //    Departments = Departments,
+    //    //    Levels = Levels
+    //    //};
+
+    //    model.totalCount = list.Count();
+
+
+    //    return model;
+    //}
+}
 }

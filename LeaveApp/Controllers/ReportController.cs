@@ -23,13 +23,18 @@ namespace LeaveApp.Controllers
 
             return View();
         }
+         public IActionResult IndexXX(HoldEmployeeListVM model)
+        {
+            var result = model;
+            return View();
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllEmployee(int? pageIndex, DateTime startDate, DateTime endDate, int stateId, string? SearchText)
         {
             //if (!Microsoft.AspNetCore.Session.IsUserLoggedIn(HttpContext))
             //{
-            //    return RedirectToAction("Login", "User", new { area = "Account" });
+            //    return RedirectToAction("Login", "User", new { area = "Account" }); 36483
             //}
 
             int number1 = 33330;
@@ -160,11 +165,24 @@ namespace LeaveApp.Controllers
             return Json(model);
         }
 
+        public JsonResult PostEmployeeNew(string emp)
+        {
+            var formData = "";
+            if(emp != null)
+            {
+                formData = emp;
+                //var serializer = JsonSerializer.Serialize(formData);
+            }
+            return Json(formData);
+        }
+
         public IActionResult ViewEmployeeDetails(int EmployeeId)
         {
             EmployeeList emp = new EmployeeList();
             var empList = emp.GetEmployeeList(DateTime.Now, DateTime.Now).FirstOrDefault(x => x.EmpId == EmployeeId);
-            return PartialView("_EmployeeDetail", empList);
+            HoldEmployeeListVM model = new HoldEmployeeListVM();
+            model.EmployeeList = empList;
+            return PartialView("_EmployeeDetail", model);
         }
 
         public async Task<IActionResult> ExportEmployeeReporToExcell(DateTime startDate, DateTime endDate)

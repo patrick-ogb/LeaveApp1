@@ -1,4 +1,6 @@
 using EmployeeManagement.Security;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using LeaveApp.Security;
 using LeaveApp.Service;
 using LeaveApp.Service.Abstract;
@@ -20,6 +22,8 @@ using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using Serilog;
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace LeaveApp
 {
@@ -122,6 +126,9 @@ namespace LeaveApp
             services.AddSingleton<DataProtecionPurposeStrings>();
             services.AddDataProtection();
 
+            services.AddHangfire(x => x.UseMemoryStorage());
+            services.AddHangfireServer();
+
         }
 
 
@@ -138,6 +145,12 @@ namespace LeaveApp
 
                 app.UseHsts();
             }
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
+
+            // Schedule a recurring job
+            RecurringJob.AddOrUpdate("CallWebsiteJob", () => CallWebsiteAsync(), "*/10 * * * *");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
@@ -149,6 +162,20 @@ namespace LeaveApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        public static async Task CallWebsiteAsync()
+        {
+            try
+            {
+                using HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44398/");
+                Console.WriteLine($"Website called at {DateTime.Now}, Status Code: {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
     }
 }

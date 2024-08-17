@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    int totalcount = 10;
 }
 
 <h6 class="text-center display-4 text-primary">Level</h6>
@@ -11,6 +13,37 @@
 {
 
     var queryString = $"determinant= 0_0_1_0_0";
+
+    <table class="table table-borderless table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Description</th>
+                <th scope="col">Comment</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(int val = 0; val <= totalcount; val ++)
+            {
+                <tr>
+
+                    <form asp-action="EmployeeCreate" asp-controller="Report">
+                    <td>
+                        Document sprecification @val
+                    </td>
+                    <td>
+                        <textarea class="form-control is-invalid" id="validationTextarea_@val" placeholder="Enter reason(s) for issueing complaince directive" required></textarea>
+                    </td>
+                    <th scope="row">
+                        <input type="submit" class="btn btn-primary mt-1" value="Proceed" />
+                    </th>
+                    </form>
+                </tr>
+            }
+            
+        </tbody>
+    </table>
 
     <table id="tableId" class="table table-striped border">
         <thead>

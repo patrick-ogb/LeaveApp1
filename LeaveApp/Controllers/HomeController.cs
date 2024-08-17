@@ -10,6 +10,10 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using QRCoder;
+using static QRCoder.PayloadGenerator;
+using LeaveApp.Services.IServices;
+using LeaveApp.Services;
 
 namespace LeaveApp.Controllers
 {
@@ -17,11 +21,13 @@ namespace LeaveApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IProcessorService _processorService;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IProcessorService processorService)
         {
             _logger = logger;
             _configuration = configuration;
+            _processorService = processorService;
         }
 
         [AllowAnonymous]
@@ -31,23 +37,39 @@ namespace LeaveApp.Controllers
 
             try
             {
+
+                //var result = _processorService.EgolePay_CheckWallet();
+
+                int number = 74856363;
+                string formattedNumber = number.ToString("N0");
+
+                //var result = ProcessorService.EgolePay_CheckWallet();
+                //var cip = "BdkeBE2qGapkeruyfGVwav0RizJg==";
+                //var result =  Decrypt(cip, true);
                 //int first = 20, sec = 0, div = 0;
                 //div = first / sec;
 
 
-                //TempData["value"] = "someValueForNextRequest";
+                //TempData["value"] = "someValueForNexOlabisi2015tRequest";
                 //object value = TempData.Peek("value");
 
 
                 //TempData.Peek("Td").ToString();
 
-                return View();
+                var model = new IndexModel { Id = 1, Name = "Joy"};
+                //var divid = 0 / 30;
+
+                return View(model);
             }
             catch (System.Exception ex)
             {
                 Log.Logger.Error("Error => {@error}", $"Message: {ex.Message}. Source: {ex.Source}. StackTrace: {ex.StackTrace}");
-               return RedirectToAction(nameof(Privacy));
+               //return RedirectToAction(nameof(Privacy));
                 throw;
+            }
+            finally
+            {
+                //RedirectToAction(nameof(Index));
             }
             
 
@@ -58,21 +80,20 @@ namespace LeaveApp.Controllers
             return View();
         }
 
-
-
-
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
 
         public  string Decrypt(string cipherString, bool useHashing)
         {
+            
             byte[] keyArray;
             byte[] toEncryptArray = Convert.FromBase64String(cipherString);
 
             // System.Configuration.AppSettingsReader settingsReader = new AppSettingsReader();
             // Get your key from config file to open the lock!
-            string key = _configuration["EAString"];
-            // Dim key As String = DirectCast("CBSCLIENT1", String)
+            //string key = _configuration["EAString"];
+            string key = "CBSCLIENT1";
+            // Dim key As String = DirectCast("CBSCLIENT1", String)  /// 3189481084
 
             if (useHashing)
             {
@@ -108,4 +129,53 @@ namespace LeaveApp.Controllers
 
 
     }
+
+
+
+
+    public class ErrorViewModel
+    {
+        public string? RequestId { get; set; }
+
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    }
+
+   public class IndexModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
 }
+
+
+
+
+  //Update [ReservationDb].[dbo].[Reservations]
+  //Set [ReservationDb].[dbo].[Reservations].RoomText = [NewLeaveAppDb].[dbo].[Employees].FirstName + ' ' + [NewLeaveAppDb].[dbo].[Employees].LastName
+  //From [ReservationDb].[dbo].[Reservations]
+  //Inner Join [NewLeaveAppDb].[dbo].[Employees]
+  //On [ReservationDb].[dbo].[Reservations].ID = [NewLeaveAppDb].[dbo].[Employees].ID
+
+
+
+  //Update [AdventureWorks2019].[Person].[AddressNew]
+  //Set [AdventureWorks2019].[Person].[AddressNew].AddressLine2 = [AdventureWorks2022].[Person].[Address].AddressLine1 + '_' + '2022'
+  //From [AdventureWorks2019].[Person].[AddressNew]
+  //Inner Join [AdventureWorks2022].[Person].[Address]
+  //On [AdventureWorks2019].[Person].[AddressNew].AddressID = [AdventureWorks2022].[Person].[Address].AddressID
+
+  //Update [ReservationDb].[dbo].[Reservations]
+  //Set [ReservationDb].[dbo].[Reservations].RoomText = [NewLeaveAppDb].[dbo].[Employees].FirstName + ' ' + [NewLeaveAppDb].[dbo].[Employees].LastName
+  //From [ReservationDb].[dbo].[Reservations]
+  //Inner Join [NewLeaveAppDb].[dbo].[Employees]
+  //On [ReservationDb].[dbo].[Reservations].ID = [NewLeaveAppDb].[dbo].[Employees].ID
+
+
+
+  //Update [AdventureWorks2019].[Person].[AddressNew]
+  //Set [AdventureWorks2019].[Person].[AddressNew].AddressLine2 = [AdventureWorks2022].[Person].[Address].AddressLine1 + '_' + '2022'
+  //From [AdventureWorks2019].[Person].[AddressNew]
+  //Inner Join [AdventureWorks2022].[Person].[Address]
+  //On [AdventureWorks2019].[Person].[AddressNew].AddressID = [AdventureWorks2022].[Person].[Address].AddressID
+

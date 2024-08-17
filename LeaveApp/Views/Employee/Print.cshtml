@@ -1,0 +1,187 @@
+﻿@{
+    Layout = "/Views/Shared/_PrintLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Permit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: small;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .centered {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .medium {
+            font-size: medium;
+        }
+
+        .small {
+            font-size: small;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="./ImportPermitPrint.aspx" id="form1">
+        <div class="aspNetHidden">
+            <input type="hidden" name="_VIEWSTATE" id="_VIEWSTATE" value="/wEPDwUJMzc0NDY3MDUzD2QWAgIDD2QWAgIBD2QWGgIBDw8WAh4ISW1hZ2VVcmwFF34vQXBwX0ltYWdlcy9uZkxvZ28uanBnZGQCCA8PFgIeBFRleHQFN1BFUk1JVCBGT1IgSU1QT1JUQVRJT04gT0YgRk9PRCBGT1IgUkVHSVNUQVJUSU9OIFBVUlBPU0VkZAIKDw8WAh8BBRBEYXRlOiAxNy8wOC8yMDI0ZGQCFA8PFgIfAQUSTkVTVExFIE5JR0VSSUEgUExDZGQCGA8PFgIfAQUmMjIvMjQgSU5DVVNUUklBTCBBVkVOVUUsIElMVVBFSlUgTEFHT1NkZAIdDw8WAh8BBTVUbyBpbXBvcnQgdGhlIHVuZGVybGlzdGVkIEZvb2QgaW50byBOaWdlcmlhIGZyb20gdGhlOmRkAh8PDxYCHwEFYk1hbnVmYWN0dXJlcjogTkVTVExFIFBPUlRVR0FMLCBORVNUTEUgRkFCUklDQSBERSBBVkFOQ0EsUlVBIERBIE5FU1RMRSAxMTYgMzg2MDA3MSBBVkFOQ0EsUE9SVFVHQUwuZGQCIQ9kFgICAQ9kFgpmDw8WAh8BBQtORi1GRC00NDkwN2RkAgEPDxYCHwEFMk5FU1RMRSBNSUxPIENIT0NPTEFURSBBTkQgTUFMVCBGTEFWT1VSRUQgV0hFQVQgQkFMZGQCAg8PFgIfAQUOSEFSREJPQVJEIFBBQ0tkZAIDDw8WAh8BBQ8zMjAgKEdyYW1zIChnKSlkZAIEDw8WAh8BBQkzMjBHIHggMTJkZAInDw8WAh8BZWRkAikPDxYCHwEFCjIwMjAtMDMtMjZkZAIsDw8WAh8BBQoyMDIxLTAzLTI1ZGQCMA8PFgIfAQWcAk5BRkRBQyBXQVJOUyBUSEFUIEFOWSBRVUFOVElUWSBPRiBTQU1QTEUgSU1QT1JURUQgQUJPVkUgVEhFIFNUQVRFRCBRVUFOVElUWSBXSUxMIE1BS0UgVEhFIElNUE9SVEVSIExJQUJMRSBGT1IgUFJPU0VDVVRJT04gVU5ERVIgQ09VTlRFUkZFSVQgQU5EIEZBS0UgRFJVR1MgQU5EIFVOV0hPTEVTT01FIFBST0NFU1NFRCBGT09EUyAoTUlTQ0VMTEFORU9VUyBQUk9WSVNJT05TKSBBQ1QgQ0FQIEMzNCBMRk4gMjAwNC4gVEhFIElNUE9SVCBQRVJNSVQgSVMgVkFMSUQgRk9SIDEgWUVBUiAoT05FIFlFQVIpZGQCOQ8PFgIfAQUaRk9PRCBSRUdJU1RSQVRJT04gRElWSVNJT05kZGT3tLCXAQH9hOj5pAiewePQyImC4yjwemRfjALQ1evq/A==" />
+        </div>
+        <div class="aspNetHidden">
+            <input type="hidden" name="_VIEWSTATEGENERATOR" id="_VIEWSTATEGENERATOR" value="165A0EF7" />
+            <input type="hidden" name="_EVENTVALIDATION" id="_EVENTVALIDATION" value="/wEdAAPjfaWMdQmSzVoeLrOK2XwgezucPl2hH0iWifbRq8fmwQKKk5YSeCb8XGovbGJzJySJFDhnmlVE2eXBv/i6F6UR+891y0lDDFSsocPqtlJSmg==" />
+        </div>
+        <div class="container">
+            <div class="centered">
+                <img id="imgClientLogo" src="../App_Images/nfLogo.jpg" alt="Client Logo" style="height:75px;width:75px;" /><br />
+                <span id="lblNafdacLine1" class="bold medium">National Agency for Food and Drug Administration and Control (NAFDAC)</span><br />
+                <span id="lblNafdacLine2" class="bold medium">PLOT 1, ISOLO IND. ESTATE, APAPA-OSHODI EXPRESSWAY, ISOLO, LAGOS.</span><br />
+                <span id="lblNafdacLine4" class="bold medium">PERMIT FOR IMPORTATION OF FOOD FOR REGISTRATION PURPOSE</span><br />
+            </div>
+            <div class="right">
+                <span id="lblDate" class="bold medium">Date: 17/08/2024</span><br />
+            </div>
+            <div>
+                <span id="lblNafdacLine5" class="small bold">SECTION 1, SUB-SECTION 2 OF THE FOOD, DRUGS AND RELATED PRODUCTS (REGISTRATION, ETC.) ACT CAP F33 (LFN) 2004: THE NATIONAL AGENCY FOR FOOD AND DRUG ADMINISTRATION AND CONTROL MAY GRANT A PERMIT FOR THE IMPORTATION OR MANUFACTURE OF A SAMPLE OF DRUG, DRUG PRODUCT, COSMETIC OR MEDICAL DEVICE FOR THE PURPOSE OF REGISTRATION AND THE IMPORTATION OR MANUFACTURE SHALL BE IN ACCORDANCE WITH THE CONDITIONS SPECIFIED IN THE PERMIT.</span><br />
+            </div>
+            <div>
+                <span id="lblNafdacLine55" class="medium">Permit is hereby granted on behalf of the Director-General of National Agency for Food and Drug Administration and Control. <b>(NAFDAC)</b></span><br />
+            </div>
+            <div>
+                <span id="lblNafdacLine6" class="bold medium">The Managing Director/Superintendent Pharmacist</span><br />
+            </div>
+            <div>
+                <span id="lblCompanyName" class="bold medium">NESTLE NIGERIA PLC</span><br />
+                <span id="lblNafdacLine7" class="bold">--------------------------------------------------------------------------------------------------------------</span><br />
+            </div>
+            <div>
+                <span id="lblCompanyAddress" class="medium">22/24 INDUSTRIAL AVENUE, ILUPEJU LAGOS</span><br />
+                <span id="lblNafdacLine8" class="bold">--------------------------------------------------------------------------------------------------------------</span><br />
+            </div>
+            <div>
+                <span id="lblNafdacLine9" class="medium">To import the underlisted Food into Nigeria from the:</span><br />
+                <span id="lblManuAddress" class="medium">Manufacturer: NESTLE PORTUGAL, NESTLE FABRICA DE AVANCA, RUA DA NESTLE 116 3860071 AVANCA, PORTUGAL.</span><br />
+            </div>
+            <div>
+                <table id="tblProduct">
+                    <tr>
+                        <th class="medium">APPLICATION NO.</th>
+                        <th class="medium">NAME OF PRODUCT</th>
+                        <th class="medium">DOSAGE FORM/PRESENTATION</th>
+                        <th class="medium">PACK SIZE</th>
+                        <th class="medium">QUANTITY</th>
+                    </tr>
+                    <tr>
+                        <td id="tcApllicationNo" class="medium">NF-FD-44907</td>
+                        <td id="tcProductName" class="medium">NESTLE MILO CHOCOLATE AND MALT FLAVOURED WHEAT BAL</td>
+                        <td id="tcPresentation" class="medium">HARDBOARD PACK</td>
+                        <td id="tcProductSize" class="medium">320 (Grams (g))</td>
+                        <td id="tcProductQty" class="medium" align="center">320G x 12</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="right">
+                <div>
+                    <img src="../App_Images/permitsignature2.png" alt="Signature" height="80px" width="160" />
+                    <p>SIGNATURE:............................................................................................</p>
+                </div>
+                <div>
+                    NAME:
+                    <span id="lblDirector" class="bold medium" style="text-decoration: underline;">Dr. Monica Hemben Eimunjeze</span>
+                </div>
+                <div>
+                    STAMP:.....................................................................................................
+                </div>
+                <div>
+                    <pre>for: DIRECTOR-GENERAL (NAFDAC)</pre>
+                </div>
+            </div>
+            <div class="bold">
+                IMPORT PERMIT NO:
+                <span id="lblCertificateNo" class="medium"></span><br />
+            </div>
+            <div>
+                DATE OF ISSUE:
+                <span id="lblDateIssue" class="medium">2024-08-26</span><br />
+            </div>
+            <div>
+                DATE OF EXPIRY:
+                <span id="lblDateExpiry" class="medium">2025-08-25</span><br />
+            </div>
+            <div>
+                <span id="lblNafdacLine12" class="bold medium">NOTE:</span><br />
+                <span id="lblNafdacLine13" class="bold medium">NAFDAC WARNS THAT ANY QUANTITY OF SAMPLE IMPORTED ABOVE THE STATED QUANTITY WILL MAKE THE IMPORTER LIABLE FOR PROSECUTION UNDER COUNTERFEIT AND FAKE DRUGS AND UNWHOLESOME PROCESSED FOODS (MISCELLANEOUS PROVISIONS) ACT CAP C34 LFN 2004. THE IMPORT PERMIT IS VALID FOR 1 YEAR (ONE YEAR)</span><br />
+            </div>
+            <div class="centered">
+                <div>
+                    @* <input type="submit" name="btnPrint" value="Print" onclick="javascript:window.print();" id="btnPrint" /> *@
+                    <input type="submit" name="btnPrint" value="Print" onclick="printWithoutButton();" id="btnPrint" />
+                    <input type="submit" name="btnDone" value="Done" id="btnDone" />
+                </div>
+                <div>
+                    <span id="lblNafdacLine16" class="bold">FOOD REGISTRATION DIVISION</span><br />
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function printWithoutButton() {
+            debugger;
+            // Get the print button element (adjust the selector as needed)
+            var printButton = document.getElementById('btnPrint');
+            var doneButton = document.getElementById('btnDone');
+
+            // Hide the print button
+            printButton.style.display = 'none';
+            doneButton.style.display = 'none';
+
+            // Print the document
+            window.print();
+
+            // Show the print button again after printing
+            window.onafterprint = function () {
+                printButton.style.display = 'block';
+                doneButton.style.display = 'block';
+            };
+        }
+    </script>
+}
+

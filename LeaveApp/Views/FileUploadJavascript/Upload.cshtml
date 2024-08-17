@@ -1,0 +1,45 @@
+﻿
+<div>
+    <iframe src="~/UploadFile/ERAS.DOC.pdf" width="300" height="300">View File</iframe>
+    @* <iframe src="C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\wwwroot/UploadFile\HouseImage.PNG" width="300" height="300"></iframe> *@
+</div>
+<img src="~/UploadFile/ERAS.DOC.pdf" target="_blank">View</img>
+<a href="~/UploadFile/ERAS.DOC.pdf" target="_blank">View</a>
+<a href="C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\wwwroot/UploadFile\HouseImage.PNG" target="_blank">View</a>
+<hr />
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" id="fileInput" />
+    <button type="button" onclick="uploadFile()">Upload</button>
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+
+    function uploadFile() {
+        var formData = new FormData();
+        var fileInput = document.getElementById('fileInput');
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/FileUploadJavascript/Upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success response
+                console.log('File uploaded successfully:', data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error('There was a problem with the upload:', error);
+            });
+    }
+
+</script>

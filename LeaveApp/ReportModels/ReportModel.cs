@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Bibliography;
 using LeaveApp.Core.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using LeaveApp.ViewModel;
+using LeaveApp.Utilities;
 
 namespace LeaveApp.ReportModel
 {
@@ -60,6 +61,10 @@ namespace LeaveApp.ReportModel
         public string SearchText { get; set; }
         public EmployeeCreate EmployeeCreateVM { get; set; }
         public EmployeeEditMultiple EmployeeEditMultipleVM { get; set; }
+        public EmployeeList EmployeeList { get; set; }
+
+        public string Name { get; set; }
+        public int Age { get; set; }
 
     }
 
@@ -83,6 +88,18 @@ namespace LeaveApp.ReportModel
         public Pager Pager { get; set; }
         public int totalCount { get; set; }
         public string SearchText { get; set; }
+        public FormData FormData { get; set; }
+        public HoldLevelVM()
+        {
+            FormData = new FormData();
+        }
+
+    }
+
+    public class FormData
+    {
+        public int FormID { get; set; }
+        public string FormText { get; set; }
 
     }
 

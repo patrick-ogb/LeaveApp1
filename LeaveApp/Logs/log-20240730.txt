@@ -1,0 +1,16 @@
+2024-07-30 22:00:12.660 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38
+2024-07-30 22:01:14.277 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38
+2024-07-30 22:01:31.003 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38
+2024-07-30 22:03:04.552 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38

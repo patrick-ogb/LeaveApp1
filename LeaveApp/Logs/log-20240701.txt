@@ -1,0 +1,12 @@
+2024-07-01 17:29:48.194 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38
+2024-07-01 20:41:20.228 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38
+2024-07-01 20:43:02.908 +01:00 [ERR] Error => Message: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.. Source: System.Private.CoreLib. StackTrace:    at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at LeaveApp.Controllers.HomeController.Decrypt(String cipherString, Boolean useHashing) in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 73
+   at LeaveApp.Controllers.HomeController.Index() in C:\Users\ogbad\source\repos\LeaveApp1\LeaveApp\Controllers\HomeController.cs:line 38

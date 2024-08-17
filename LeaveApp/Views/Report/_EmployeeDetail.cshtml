@@ -1,5 +1,7 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers@using LeaveApp.ReportModel;
-@model LeaveApp.Utilities.EmployeeList;
+@using LeaveApp.ReportModel;
+@model LeaveApp.ReportModel.HoldEmployeeListVM;
+@* model LeaveApp.Utilities.EmployeeList; *@
 <table class="table table w-100" id="dataTable" width="100%" cellspacing="0"
        style="color:black; font-size: 12px;">
 
@@ -19,22 +21,33 @@
 
             <tr>
                 <td>
-                    @Model.Name
+                    @Model.EmployeeList.Name
                 </td>
                 <td>
-                    @Model.Name
+                    @Model.EmployeeList.Name
                 </td>
                 <td>
-                    @Model.StartDate
+                    @Model.EmployeeList.StartDate
                 </td>
                 <td>
-                    @Model.EndDate
+                    @Model.EmployeeList.EndDate
                 </td>
             </tr>
 
         </tbody>
+        <form asp-controller="Report" asp-action="IndexXX" method="post">
+            <!-- Your form fields go here -->
+            <div class="col-sm-9">
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="col-sm-9">
+                <input asp-for="Age" class="form-control" />
+            </div>
+            <input type="submit" value="Submit" />
+        </form>
 
     }
+
    
 
 </table>

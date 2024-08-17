@@ -1,0 +1,16 @@
+﻿@model LeaveApp.Controllers.ItemViewModel
+
+<form asp-action="Index" method="post">
+    <div>
+        @foreach (var item in Model.Items)
+        {
+            <div>
+                <input type="checkbox" name="SelectedItemIds" value="@item.Id" />
+                <label>@item.Name</label>
+            </div>
+        }
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+

@@ -28,14 +28,18 @@
 
                             <form method="post">
                                 @Html.AntiForgeryToken()
-                                <div>
+                                <div class="row">
+                                <div class="col-md-6">
                                     <label asp-for="EmployeeListVMSearchParams.StartDate" class="col-md-3 form-label">Start Date</label>
                                     <input type="date" asp-for="EmployeeListVMSearchParams.StartDate" placeholder="Start Date" class="form-control col-12" />
                                 </div>
+                                </div>
                                 <br />
-                                <div>
+                                <div class="row">
+                                    <div class="col-md-6">
                                     <label asp-for="EmployeeListVMSearchParams.EndDate" class="col-md-3 form-label">End Date</label>
                                     <input type="date" asp-for="EmployeeListVMSearchParams.EndDate" placeholder="End Date" class="form-control col-12" />
+                                </div>
                                 </div>
                                 <br />
                                 <input type="submit" class="btn btn-primary mt-1" value="Submit" />
@@ -92,23 +96,26 @@
 
 
                 <div class="modal" tabindex="-1" id="myModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" id="myModalBody">
-                                <p>Modal body text goes here.</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <a type="button" class="btn btn-primary" asp-action="Index" asp-asp-controller="Report">Save changes</a>
+                    @* <form> *@
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="myModalBody">
+                                    <p>Modal body text goes here.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <a type="button" class="btn btn-primary" asp-action="IndexXX" asp-asp-controller="Report">Save changes</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @* </form> *@
+                    
                 </div>
 
 
@@ -129,6 +136,10 @@
                         @foreach (var item in Model.HoldEmployeeListVMs)
                         {
                             ind++;
+                            var continueId = "continue_" + ind;
+                            var continueBtn = "continueBtn_" + ind;
+                            var sessionId = "sessionId_" + ind;
+                            var lblId = "lblId_" + ind;
                             <tr>
                                 <td>
                                     @ind
@@ -146,10 +157,22 @@
                                     @item.EndDate
                                 </td>
                                 <td>
+                                    <textarea class="form-control is-invalid" id="validationTextarea_@item.EmpId" placeholder="Enter reason(s) for issueing complaince directive" required></textarea>
+                                </td>
+                                <td>
                                     <input type="checkbox" class="checkbox" id="checkbox_@item.EmpId" value="@item.EmpId">@item.Name<br>
                                 </td>
                                 <td>
                                     <button><a href="#" type="button" onclick="showEmployee(@item.EmpId)" />View</button>
+                                </td>
+                                <td>
+                                    <div>
+                                        <h1 id="@sessionId">Session: @ind </h1>
+                                        <label id="@lblId"></label>
+                                        <br />
+                                        <input type="text" class="btn btn-primary mt-1" id="@continueId" />
+                                        <button id="@continueBtn" onclick="continueFunc(@continueId, @continueBtn, @sessionId, @lblId)">Continue</button>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -177,6 +200,9 @@
                     <input id="btnSubmit" type="button" class="btn btn-success m-1" value="Submit" />
                 </form>
 
+
+
+                
 
 
                 @if (Model.Pager.EndPage > 1)
@@ -252,6 +278,8 @@
 
     var showEmployee = function (employeeId) {
         //debugger;
+        var textEar = $("#validationTextarea_" + employeeId);
+        console.log(textEar);
         $.ajax({
             type: "POST",
             url: "ViewEmployeeDetails",
@@ -264,6 +292,33 @@
         })
     }
 
+    var continueFunc = function (continueId, continueBtn, sessionId, lblId) {
+        var appId = continueId.value;
+        // var appBtn = continueBtn.value;
+        // var appsessionId = sessionId.value;
+
+        var el = $(continueId)
+        var elBtn = $(continueBtn)
+        var elSession = $(sessionId)
+        var ellblId = $(lblId)
+        $.ajax({
+            type: "POST",
+            url: "PostEmployeeNew",
+            data: {
+                emp: appId
+            },
+            success: function (response) {
+                //debugger;
+                //alert("Your are here ");
+                ellblId.text("Complaince Directive successfly issued!")
+                el.remove();
+                elBtn.remove();
+                elSession.remove();
+              
+            }
+
+        })
+    }
 
 
     $(document).ready(function () {
@@ -273,7 +328,7 @@
             var checkboxId = $(this).attr('id'); // Get the ID of the clicked checkbox
             if ($(this).is(':checked')) { // Check if the checkbox is checked
                 selectedItems.push(checkboxId); // Add the ID to the array if it's checked
-                console.log(selectedItems);
+                //console.log(selectedItems);
                 $("#selectedList").attr({
                     "value": selectedItems,
                 });

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model LeaveApp.Controllers.IndexModel;
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,6 +8,10 @@
 <div class="text-center">
     <h1 class="display-4 text-primary">Welcome To</h1>
     <p>Employees Leave Management System</p>
+
+    <input type="checkbox" id="chekBoxId" onclick="funcClick()"/>
+    <label>Is Completed</label>
+    <input type="hidden" value="TestingValue" asp-for="Id"  value="@Model.Name" id="hiddenFieldID"/>
 
      <!-- Modal button -->
     <div class="col-sm-3 ">
@@ -41,6 +46,17 @@
 </div>
 
 @section Scripts {
+
+    <script type="text/javascript">
+        function funcClick() {
+            debugger;
+            var ch = document.getElementById('hiddenFieldID');
+            ch.type = "text";
+            ch.style.display = "block";
+            console.log(ch);
+        }
+</script>
+
     <script type="text/javascript">
         $('#tableId').DataTable({
         });
